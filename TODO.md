@@ -4,9 +4,9 @@
 - [x] LLMProvider and AgentRouter-compatible integration
 - [x] SearchProvider and Tavily integration
 - [x] Safe page retrieval and publication-date evidence
-- [ ] Mock providers and synthetic fixtures
-- [ ] Scout, dynamic queries and candidate extraction
-- [ ] Normalization, semantic deduplication, date filtering
+- [x] Mock providers and synthetic fixtures
+- [x] Scout, dynamic queries and candidate extraction
+- [x] Normalization, semantic deduplication, date filtering
 - [ ] Verifier and source/fact/claim validation
 - [ ] Context Analyst and hype detection
 - [ ] Impact Analyst and weighted scoring
@@ -16,5 +16,3 @@
 - [ ] Integration and adversarial regression tests
 - [ ] README and final CLI/UI smoke tests
 - [ ] Secrets audit, clean git status and GitHub push
-
-
