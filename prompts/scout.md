@@ -5,3 +5,4 @@ Preserve multiple articles for one event. Include product/version entities, not 
 Distinguish release, benchmark, pricing, update and research actions.
 Research needs a practical implementation, measured improvement or credible adoption signal.
 Potential significance is a hypothesis, not a confirmed fact. Ignore trivial cosmetic updates.
+Assign potential_significance_score 0-10 as a tentative triage priority, never as final significance.

@@ -64,7 +64,7 @@ class MockLLM(LLMProvider):
                     events.append({"title": "DEMO: " + title, "short_description": sources[0]["snippet"],
                         "category": category, "event_kind": kind, "entities": [entity],
                         "source_urls": [s["url"] for s in sources],
-                        "potential_significance": "Синтетический пример потенциально полезного изменения."})
+                        "potential_significance": "Синтетический пример потенциально полезного изменения.", "potential_significance_score": 8})
             return {"events": events}
         if agent == "deduplication":
             return {"groups": []}

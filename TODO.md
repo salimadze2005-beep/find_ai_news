@@ -10,8 +10,8 @@
 - [x] Verifier and source/fact/claim validation
 - [x] Context Analyst and hype detection
 - [x] Impact Analyst and weighted scoring
-- [ ] Editor, digest and unconfirmed section
-- [ ] Pipeline persistence, reuse, logs and usage totals
+- [x] Editor, digest and unconfirmed section
+- [x] Pipeline persistence, reuse, logs and usage totals
 - [ ] Streamlit UI, debug views and history
 - [ ] Integration and adversarial regression tests
 - [ ] README and final CLI/UI smoke tests

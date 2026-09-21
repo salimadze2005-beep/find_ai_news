@@ -17,6 +17,7 @@ class Discovery(Model):
     event_kind: Literal["release", "update", "benchmark", "pricing", "research"]
     source_urls: list[str] = Field(min_length=1)
     potential_significance: str
+    potential_significance_score: float = Field(default=5, ge=0, le=10)
     entities: list[str] = Field(min_length=1)
 
 
