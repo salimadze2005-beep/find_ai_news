@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     search_queries_count: int = Field(8, ge=3, le=16)
     verify_sources_min: int = Field(2, ge=2, le=5)
     verify_sources_target: int = Field(3, ge=2, le=8)
+    verifier_attempts: int = Field(2, ge=1, le=3)
     scoring_weights: dict[str, float] = Field(default_factory=lambda: {
         "importance": .30, "impact": .25, "practicality": .20, "novelty": .15, "confidence": .10})
     llm_model: str = "configure-model-id"

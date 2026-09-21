@@ -58,10 +58,14 @@ python -m pytest -q
 `LLM_RESPONSE_FORMAT=json_object` совместим с большинством таких gateway: схема передаётся
 в prompt, ответ валидируется Pydantic. `json_schema` включает strict structured output,
 если его поддерживает провайдер. Ошибки HTTP, отказ, неполный JSON и неверная схема
-отображаются явно; скрытых повторных платных запросов нет.
+отображаются явно. Verifier может сделать до `VERIFIER_ATTEMPTS` ограниченных попыток;
+usage каждой попытки сохраняется.
 
-Live end-to-end без ваших ключей не проверялся. HTTP-контракты и ошибки проверены
-подставными ответами. Доступность моделей и качество live-анализа требуют реального запуска.
+Live-проверка 21 сентября 2026 подтвердила OpenRouter structured output, Tavily search,
+загрузку публичных страниц и строгий Verifier на реальном релизе Qwen-Image-2.1. После
+первого поиска Tavily начал отвечать HTTP 403, а дальнейшие прогоны исчерпали доступный
+лимит OpenRouter (HTTP 402), поэтому повтор всего pipeline до Editor после последних
+исправлений требует доступной квоты. HTTP-контракты также проверены подставными ответами.
 Контракты: [Tavily](https://github.com/tavily-ai/tavily-python/blob/master/tavily/tavily.py),
 [пример совместимого Agent Router API](https://github.com/theagentrouter/agent-router/blob/main/site/docs/capabilities/llm-integrations/supported-endpoints.md).
 
@@ -118,6 +122,7 @@ Editor получает компактные проверенные резуль
 | SEARCH_QUERIES_COUNT | 8 | Разнообразие поисковых направлений |
 | MAX_ANALYSIS_EVENTS | 12 | Максимум анализируемых кандидатов |
 | VERIFY_SOURCES_MIN / TARGET | 2 / 3 | Минимум издателей / цель research |
+| VERIFIER_ATTEMPTS | 2 | Ограниченные исправления невалидного evidence JSON |
 | SCORING_WEIGHTS | .30/.25/.20/.15/.10 | Importance / Impact / Practicality / Novelty / Confidence |
 | MAX_LLM_CALLS / MAX_SEARCH_CALLS | 80 / 80 | Жёсткие лимиты вызовов |
 | MAX_PAGE_FETCHES | 80 | Лимит загрузок страниц |
@@ -135,6 +140,21 @@ duration, input/output/total tokens, успех и estimated cost. Цена вы
 при наличии usage и настроенных тарифов; неизвестная стоимость отмечается отдельно.
 Специальные тарифы cached tokens не выделяются. **Стоимость поиска не входит в LLM cost.**
 Ограничения числа вызовов не являются точным денежным бюджетом.
+
+Для воспроизводимого аудита реальных страниц без поискового API:
+
+```sh
+python -m app.evaluate_sources evaluation/real_news_2026-09-21.json --output data/real-source-audit.json
+```
+
+Для полного pipeline с реальным LLM и зафиксированным публичным набором URL (без Tavily):
+
+```sh
+python -m app.evaluate_pipeline evaluation/real_news_2026-09-21.json --output-prefix data/curated-live
+```
+
+Опция `--analysis-model MODEL_ID` направляет Verifier, Context, Impact и Editor в более
+сильную модель, оставляя Scout на дешёвой модели из `.env`.
 
 ## Хранение и восстановление
 

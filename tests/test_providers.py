@@ -60,6 +60,11 @@ def test_conflicting_dates_unknown():
     assert article_data('<meta name="date" content="2026-09-20"><script type="application/ld+json">{"datePublished":"2020-01-01"}</script>')[1] is None
 
 
+def test_common_publication_metadata_and_time_element():
+    assert article_data('<meta name="parsely-pub-date" content="2026-09-20T10:00:00Z">')[1] is not None
+    assert article_data('<time datetime="2026-09-20T10:00:00Z">20 September</time>')[1] is not None
+
+
 def test_source_urls():
     assert not valid_url("file:///etc/passwd")
     assert not valid_url("https://user:pass@example.com")

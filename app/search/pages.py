@@ -68,8 +68,10 @@ def parse_date(value):
 def article_data(html):
     soup = BeautifulSoup(html, "html.parser")
     dates = []
+    publication_names = {"article:published_time", "datepublished", "date", "pubdate",
+                         "publishdate", "publish-date", "sailthru.date", "parsely-pub-date"}
     for meta in soup.find_all("meta"):
-        if (meta.get("property") or meta.get("name", "")).lower() in {"article:published_time", "datepublished", "date"}:
+        if (meta.get("property") or meta.get("name", "")).lower() in publication_names:
             dates.append(meta.get("content", ""))
     def walk(obj):
         if isinstance(obj, dict):
@@ -85,7 +87,7 @@ def article_data(html):
             walk(json.loads(script.string or ""))
         except (ValueError, RecursionError):
             continue
-    for t in soup.select('time[itemprop="datePublished"]'):
+    for t in soup.select('time[datetime]'):
         dates.append(t.get("datetime", t.get_text()))
     parsed = [(raw, *parse_date(raw)) for raw in dates]
     parsed = [x for x in parsed if x[1] is not None]

@@ -13,9 +13,10 @@ def analyze_context(event, llm, search, pages, end, trace):
     sources = [s for s in sources if s.fetched and (s.published_at is None or s.published_at <= end)]
     context = ask(llm, "context_analyst", {"event": event.model_dump(mode="json", exclude={"sources"}),
         "sources": source_data(sources), "as_of": end.isoformat()}, ContextAnalysis)
-    errors = evidence_errors(context.previous_state, sources)
-    if errors:
-        raise ProviderError("Historical context evidence failed validation")
+    valid_previous = [item for item in context.previous_state if not evidence_errors([item], sources)]
+    if len(valid_previous) != len(context.previous_state):
+        context.previous_state = valid_previous
+        context.limitations.append("Historical comparison omitted where its citations could not be validated.")
     baseline = " ".join(x.text for x in context.previous_state + event.verification.confirmed_facts + event.verification.company_claims + event.verification.key_numbers)
     if numeric_errors([context.what_changed, context.hype_reason] + context.limitations, baseline):
         raise ProviderError("Context introduces a number absent from cited evidence")

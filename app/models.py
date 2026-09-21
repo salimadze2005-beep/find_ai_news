@@ -51,6 +51,7 @@ class Verification(Model):
     verified: bool
     occurred_at: AwareDatetime | None
     date_source_url: str
+    date_quote: str
     primary_source_url: str
     independent_source_urls: list[str]
     confirmed_facts: list[Evidence]

@@ -1,22 +1,22 @@
 # Project status
 
-## Current snapshot — implementation complete and delivered
+## Current snapshot — implementation complete; real-source hardening added
 All nine implementation stages are complete. The repository contains five research roles,
 seven editable prompts plus shared rules, typed evidence, bounded Tavily/AgentRouter-compatible
 adapters, strict date/source gates, semantic deduplication, configurable scoring, SQLite history,
 analysis reuse, CLI, Streamlit dashboard, usage/cost reporting and offline synthetic mode.
 Final stage changed README.md and added recovery instructions/CI in the preceding checkpoint.
 
-Verified: 41 tests pass (unit, HTTP contracts, adversarial integration, full mock pipeline,
+Verified before the current checkpoint: 41 tests pass (unit, HTTP contracts, adversarial integration, full mock pipeline,
 cache reuse and Streamlit RUN ANALYSIS via AppTest); no failing tests. `pip check` and
 compileall pass. README CLI writes Markdown/JSON; actual Streamlit root and health endpoint
 return HTTP 200. Secret-pattern audit passes; .env is ignored and untracked, as are .venv
 and data. Original repository license/history preserved, incremental commits on main.
 
-Delivery: implementation pushed to origin/main (3e2e271); final full local suite: 41 passed.
-No implementation stage remains unfinished. Next optional step: configure live keys/model IDs
-and evaluate a real 48-hour digest using debug evidence. Live API evaluation requires keys,
-not claimed as tested. Current environment has no configured live API keys.
+Delivery before this checkpoint: implementation pushed to origin/main (3e2e271); final full
+local suite at that point: 41 passed. No implementation stage remains unfinished. Live
+credentials are now configured locally and remain ignored by Git. The current checkpoint below
+records the real-source evaluation and remaining external quota limitation.
 
 Known limitations to preserve in reporting: HTML only, conservative publication metadata/date-only
 handling, snippets/page text caps, LLM-dependent semantic entailment and editorial independence,
@@ -27,6 +27,47 @@ Numeric token checks are conservative and reject unsourced derived percentages/u
 Decisions not to change casually: re-verify facts on each run; cache only expensive analysis;
 keep mock explicit and never silently fall back from live; never fill a digest to meet a quota;
 keep credentials and local databases outside Git; preserve FACT/CLAIM/INFERENCE separation.
+
+## Real-source evaluation checkpoint — 2026-09-21
+
+Tested the live adapters and pipeline against current public news. OpenRouter structured JSON
+and usage reporting worked with `openai/gpt-4.1-mini`; the first Tavily discovery run worked,
+then subsequent Tavily calls returned HTTP 403. The initial broad run consumed 65,077 tokens
+across nine LLM calls and conservatively rejected stale, weakly sourced and malformed candidates.
+Curated public-source runs then exercised the same Scout/Verifier/page pipeline without Tavily.
+Persisted run summaries account for 306,896 OpenRouter tokens across the broad and curated
+evaluations (excluding one small connectivity probe); reported provider cost remains unknown.
+
+Qwen-Image-2.1 (official GitHub changelog dated 2026-09-20, independent PC Watch report and
+fresh Pexo publication) now passes strict verification with primary plus independent verbatim
+evidence. A fresh recap of Unity's September 9 release is rejected because the event itself is
+outside the 48-hour window. MLPerf September 16 and a future-effective xAI pricing change are
+also represented in the audit corpus as negative date cases.
+
+Real runs exposed and fixed: missing date quotation in the Verification schema; insufficient
+publication metadata selectors; overly literal punctuation/date numeric matching; combined
+multi-page quotes; loss of the previous invalid JSON during Verifier retries; brittle rejection
+when one evidence item or historical citation was invalid. Verifier now searches primary and
+independent evidence separately, prunes invalid items, preserves the raw response for repair,
+and can extract bounded verbatim core-event excerpts only from URLs already selected by the
+Verifier. Context drops invalid historical citations and records the limitation instead of
+discarding a verified current event.
+
+Created `app/evaluate_sources.py`, `app/evaluate_pipeline.py` and
+`evaluation/real_news_2026-09-21.json`. Substantially changed verifier/context agents, page date
+parsing, schemas, prompts, settings and regression tests. Local databases and generated reports
+remain ignored. No secret values were printed, committed or placed in command arguments.
+
+Current validation: all 51 tests pass; no failing tests. The last paid run reached and passed
+Verifier, then exposed the Context citation issue. After that fix, OpenRouter returned HTTP 402
+at Scout because the account
+quota/balance was exhausted; `openai/gpt-4.1` was also unavailable with HTTP 402. Therefore the
+final Context → Impact → Editor rerun is pending external quota. Estimated cost is unavailable
+because `MODEL_PRICES` is not configured; provider usage is persisted per call.
+
+Next concrete step: restore OpenRouter quota and Tavily access, set stronger role-specific model
+IDs if available, then rerun the curated command followed by the ordinary Tavily live command.
+Do not weaken the date/source/evidence gates to force a non-empty digest.
 
 ## Checkpoint history (earlier states below are historical)
 

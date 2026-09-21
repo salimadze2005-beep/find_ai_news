@@ -1,0 +1,16 @@
+{
+  "as_of": "2026-09-21T11:00:27Z",
+  "lookback_hours": 48,
+  "method": "Manually discovered public URLs; live PageProvider/date-gate evaluation, not an automated LLM/search pipeline run",
+  "sources": [
+    {"id": "qwen-blog", "title": "Qwen-Image-2.1 announcement", "url": "https://qwen.ai/blog?id=qwen-image-2.1", "purpose": "Fresh primary announcement; inspect JavaScript/HTML support", "snippet": "Qwen announced Qwen-Image-2.1 on 2026-09-20: a unified image generation and editing model with native transparent image support."},
+    {"id": "qwen-github", "title": "Qwen-Image-2.1 official repository", "url": "https://github.com/QwenLM/Qwen-Image-2.1", "purpose": "Dated official changelog and runnable code", "snippet": "2026.09.20: We released Qwen-Image-2.1. The repository describes a 7B visual generation component, generation/editing, transparency and up to 10 reference images."},
+    {"id": "qwen-model", "title": "Qwen-Image-2.1 model card", "url": "https://huggingface.co/Qwen/Qwen-Image-2.1", "purpose": "Primary model card and research license", "snippet": "Official Qwen model card: Qwen-Image-2.1 weights use the Qwen Research License and support Diffusers."},
+    {"id": "qwen-independent", "title": "PC Watch Qwen-Image-2.1 report", "url": "https://pc.watch.impress.co.jp/docs/news/2142515.html", "purpose": "Fresh independent publisher; not independent benchmark replication", "snippet": "PC Watch reported on September 20 that Qwen released Qwen-Image-2.1 weights, covering its 7B visual component, transparent images and research-only free model use."},
+    {"id": "qwen-independent-dated", "title": "Independent Qwen-Image-2.1 overview", "url": "https://pexo.ai/blog/what-is-qwen-image-2-1-7489", "purpose": "Independently published page with exact publication metadata", "snippet": "Independent overview of Qwen-Image-2.1 published during the evaluation window; confirms release availability and core generation/editing capabilities."},
+    {"id": "unity-primary", "title": "Official Unity Plugin for Claude Code", "url": "https://unity.com/blog/unity-plugin-for-claude-code", "purpose": "Stale primary announcement dated September 9", "snippet": "Unity's official post is dated September 9, 2026 and announces its Claude Code plugin."},
+    {"id": "unity-recap", "title": "Unity plugin coverage", "url": "https://the-decoder.com/unity-launches-official-plugins-for-claude-code-and-openai-codex-to-stop-ai-agents-from-using-outdated-tutorials/", "purpose": "Recent article must not redate the earlier event", "snippet": "A September 19 article recaps Unity plugins, while the primary Claude Code announcement was September 9."},
+    {"id": "mlperf-old", "title": "MLPerf Inference v6.1", "url": "https://mlcommons.org/2026/09/mlperf-inference-v6-1-results/", "purpose": "September 16 primary source: old-event negative control", "snippet": "MLCommons published MLPerf Inference v6.1 results on September 16, outside the 48-hour window."},
+    {"id": "xai-future", "title": "xAI API pricing", "url": "https://docs.x.ai/developers/pricing", "purpose": "Pricing effective September 21 at 12 PM PT is after this UTC evaluation window", "snippet": "xAI documents an X Search pricing change effective September 21, 2026 at 12:00 PM PT, after the audit cutoff."}
+  ]
+}

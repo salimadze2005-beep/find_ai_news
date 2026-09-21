@@ -9,3 +9,6 @@ Use numeric spellings exactly as present in quoted evidence. Do not invent perce
 convert units or introduce unsourced sample sizes, dates, ratios or numbered recommendations.
 Each Evidence item has one exact quote; every source_url on that item must contain that quote.
 Use separate Evidence items for differently worded independent confirmations.
+Keep quotes in the source's original language. Never translate a quote. Prefer one URL per
+Evidence item and quotes under 240 characters. You may use ... only to omit text between two
+otherwise verbatim segments from the same source.

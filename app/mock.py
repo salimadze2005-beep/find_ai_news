@@ -77,6 +77,7 @@ class MockLLM(LLMProvider):
             if rumor:
                 independent = []
             return {"verified": not rumor, "occurred_at": primary["published_at"], "date_source_url": primary_url,
+                "date_quote": primary["date_evidence"].removeprefix("Synthetic fixture publication: "),
                 "primary_source_url": "" if rumor else primary_url,
                 "independent_source_urls": [s["url"] for s in independent],
                 "confirmed_facts": [] if rumor else [evidence(primary)] + [evidence(s) for s in independent],
