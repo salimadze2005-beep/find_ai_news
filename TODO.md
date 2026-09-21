@@ -15,4 +15,9 @@
 - [x] Streamlit UI, debug views and history
 - [x] Integration and adversarial regression tests
 - [x] README and final CLI/UI smoke tests
-- [ ] Secrets audit, clean git status and GitHub push
+- [x] Secrets audit, clean git status and GitHub push
+
+## Optional quality follow-ups (not unimplemented MVP components)
+- [ ] Configure live API credentials/model IDs and evaluate a real 48-hour digest
+- [ ] Build a labelled corpus to compare source independence, recall and factual accuracy
+- [ ] Expand date extraction and non-HTML support using that evaluation

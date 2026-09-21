@@ -1,6 +1,6 @@
 # Project status
 
-## Current snapshot — implementation complete, delivery in progress
+## Current snapshot — implementation complete and delivered
 All nine implementation stages are complete. The repository contains five research roles,
 seven editable prompts plus shared rules, typed evidence, bounded Tavily/AgentRouter-compatible
 adapters, strict date/source gates, semantic deduplication, configurable scoring, SQLite history,
@@ -13,8 +13,9 @@ compileall pass. README CLI writes Markdown/JSON; actual Streamlit root and heal
 return HTTP 200. Secret-pattern audit passes; .env is ignored and untracked, as are .venv
 and data. Original repository license/history preserved, incremental commits on main.
 
-Next concrete step: final diff review/commit and push main to existing origin; confirm remote SHA.
-Remaining required work: GitHub delivery only. Live API evaluation is a follow-up requiring keys,
+Delivery: implementation pushed to origin/main (3e2e271); final full local suite: 41 passed.
+No implementation stage remains unfinished. Next optional step: configure live keys/model IDs
+and evaluate a real 48-hour digest using debug evidence. Live API evaluation requires keys,
 not claimed as tested. Current environment has no configured live API keys.
 
 Known limitations to preserve in reporting: HTML only, conservative publication metadata/date-only
@@ -92,3 +93,8 @@ Hardening validation: all 41 tests pass; no failing tests.
 
 Final page transport detail: validated public IP is pinned with original TLS SNI/Host; keepalive disabled to prevent certificate reuse across hostnames sharing an IP. Targeted provider/regression suite: 23 tests pass after this change.
 Real public HTTPS page fetch via pinned transport succeeded (python.org); no paid API involved.
+
+## Delivery checkpoint
+Ten incremental implementation commits pushed successfully using existing environment auth.
+Working tree was clean after push; .env remains ignored/untracked. GitHub Actions was triggered
+for 3e2e271 and was still running at this checkpoint; local verification is complete.
