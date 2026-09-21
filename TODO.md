@@ -12,7 +12,7 @@
 - [x] Impact Analyst and weighted scoring
 - [x] Editor, digest and unconfirmed section
 - [x] Pipeline persistence, reuse, logs and usage totals
-- [ ] Streamlit UI, debug views and history
+- [x] Streamlit UI, debug views and history
 - [ ] Integration and adversarial regression tests
 - [ ] README and final CLI/UI smoke tests
 - [ ] Secrets audit, clean git status and GitHub push
