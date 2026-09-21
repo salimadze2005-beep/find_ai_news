@@ -33,3 +33,6 @@ Live API end-to-end testing requires user-supplied credentials and available mod
 ## Remaining
 See TODO.md. Each major checkpoint must include tests, status updates, diff review and a commit.
 
+
+## Checkpoint 2 — providers
+Implemented LLMProvider/AgentRouterProvider, Tavily SearchProvider, public HTML retrieval, publication metadata and UTC filtering. Files: app/llm/*, app/search/*, tests/test_providers.py. Eleven tests pass, including mocked HTTP contracts, usage/cost, error sanitization, old/unknown dates and URL checks. No live paid calls made. Next: Scout, deduplication and mock providers. JSON object mode is default for gateway compatibility; schema mode is opt-in. Page text is capped at 6000 characters; HTML only. Date-only boundary cases are conservatively rejected.

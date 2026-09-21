@@ -1,9 +1,9 @@
 # Implementation checklist
 - [x] Configuration, Pydantic models and SQLite foundation
 - [x] Foundation tests and checkpoint
-- [ ] LLMProvider and AgentRouter-compatible integration
-- [ ] SearchProvider and Tavily integration
-- [ ] Safe page retrieval and publication-date evidence
+- [x] LLMProvider and AgentRouter-compatible integration
+- [x] SearchProvider and Tavily integration
+- [x] Safe page retrieval and publication-date evidence
 - [ ] Mock providers and synthetic fixtures
 - [ ] Scout, dynamic queries and candidate extraction
 - [ ] Normalization, semantic deduplication, date filtering
@@ -16,4 +16,5 @@
 - [ ] Integration and adversarial regression tests
 - [ ] README and final CLI/UI smoke tests
 - [ ] Secrets audit, clean git status and GitHub push
+
 
