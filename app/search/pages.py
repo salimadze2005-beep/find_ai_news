@@ -22,6 +22,8 @@ def domain(url):
 
 def valid_url(url):
     try:
+        if re.search(r'[\s<>"\\]', url):
+            return False
         p = urlsplit(url)
         return bool(p.scheme in {"http", "https"} and p.hostname and not p.username and not p.password
                     and p.port in {None, 80, 443} and domain(url) not in BLOCKED)
@@ -36,14 +38,19 @@ def canonical_url(url):
 
 
 def public_url(url):
+    return bool(public_addresses(url))
+
+
+def public_addresses(url):
     if not valid_url(url):
-        return False
+        return []
     try:
         host = urlsplit(url).hostname
         addresses = socket.getaddrinfo(host, None, type=socket.SOCK_STREAM)
-        return bool(addresses) and all(ipaddress.ip_address(a[4][0]).is_global for a in addresses)
+        ips = list(dict.fromkeys(a[4][0] for a in addresses))
+        return ips if ips and all(ipaddress.ip_address(ip).is_global for ip in ips) else []
     except (OSError, ValueError):
-        return False
+        return []
 
 
 def parse_date(value):
@@ -84,7 +91,7 @@ def article_data(html):
     parsed = [x for x in parsed if x[1] is not None]
     # Conflicting metadata is not trustworthy enough for automatic inclusion.
     date, precision, evidence = None, "unknown", ""
-    if parsed and len({x[1].date() for x in parsed}) == 1:
+    if parsed and len({x[1].date() for x in parsed}) == 1 and len({x[1] for x in parsed if x[2] == "exact"}) <= 1:
         raw, date, precision = sorted(parsed, key=lambda x: x[2] != "exact")[0]
         evidence = "Page publication metadata: " + raw
     for node in soup(["script", "style", "nav", "footer", "header", "form"]):
@@ -122,9 +129,18 @@ class WebPages(PageProvider):
             self.calls += 1
             url = source.url
             for _ in range(4):
-                if not public_url(url):
+                addresses = public_addresses(url)
+                if not addresses:
                     raise ValueError("Non-public or disallowed URL")
-                with self.client.stream("GET", url) as response:
+                # Pin the validated IP: a second DNS lookup must not bypass the private-IP gate.
+                parsed = urlsplit(url)
+                ip = addresses[0]
+                netloc = f"[{ip}]" if ":" in ip else ip
+                if parsed.port:
+                    netloc += f":{parsed.port}"
+                pinned = urlunsplit((parsed.scheme, netloc, parsed.path, parsed.query, ""))
+                with self.client.stream("GET", pinned, headers={"Host": parsed.netloc},
+                                        extensions={"sni_hostname": parsed.hostname}) as response:
                     if response.is_redirect:
                         url = urljoin(url, response.headers.get("location", ""))
                         continue

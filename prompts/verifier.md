@@ -11,3 +11,5 @@ not when a recap was published. A new article about an old release is not a new 
 Primary source must be recent and fetched. Unknown date, missing primary or independent evidence:
 verified=false. For rumors, preserve attribution and explicitly state what is and is not established.
 No speculation in confirmed_facts. Confidence rates evidence reliability, not importance.
+Each key_numbers entry explicitly labels status FACT or COMPANY CLAIM. A quoted company
+benchmark remains COMPANY CLAIM, even if the existence of that claim is confirmed.

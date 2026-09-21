@@ -13,6 +13,6 @@
 - [x] Editor, digest and unconfirmed section
 - [x] Pipeline persistence, reuse, logs and usage totals
 - [x] Streamlit UI, debug views and history
-- [ ] Integration and adversarial regression tests
+- [x] Integration and adversarial regression tests
 - [ ] README and final CLI/UI smoke tests
 - [ ] Secrets audit, clean git status and GitHub push

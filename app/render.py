@@ -11,7 +11,8 @@ def evidence_lines(items, label):
         lines.append(f"### {label}")
         for item in items:
             refs = " ".join(f"[источник {i+1}](<{u}>)" for i, u in enumerate(item.source_urls))
-            lines.append(f"- {safe(item.text)} {refs}")
+            status = f"{item.status}: " if hasattr(item, "status") else ""
+            lines.append(f"- {status}{safe(item.text)} {refs}")
     return lines
 
 

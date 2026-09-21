@@ -30,6 +30,10 @@ class Evidence(Model):
     quote: str = Field(min_length=1)
 
 
+class KeyNumber(Evidence):
+    status: Literal["FACT", "COMPANY CLAIM"]
+
+
 class CandidateEvent(Model):
     id: str
     title: str
@@ -52,7 +56,7 @@ class Verification(Model):
     confirmed_facts: list[Evidence]
     company_claims: list[Evidence]
     unverified_claims: list[Evidence]
-    key_numbers: list[Evidence]
+    key_numbers: list[KeyNumber]
     conflicts: list[str]
     confidence: float = Field(ge=0, le=10)
     reason: str
@@ -99,12 +103,17 @@ class AnalyzedEvent(Model):
     significance_score: float = Field(ge=0, le=10)
 
 
+class Exclusion(Model):
+    id: str
+    reason: str
+
+
 class Editorial(Model):
     selected_ids: list[str]
     summary: str
     market_trend: str
     trend_event_ids: list[str]
-    excluded: dict[str, str]
+    excluded: list[Exclusion]
 
 
 class Usage(Model):

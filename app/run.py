@@ -9,6 +9,8 @@ from app.llm.base import ProviderError
 
 
 def main():
+    if hasattr(sys.stderr, "reconfigure"):
+        sys.stderr.reconfigure(encoding="utf-8")
     settings = Settings()
     parser = argparse.ArgumentParser(description="AI Intelligence: evidence-first web research")
     parser.add_argument("--mock", action="store_true", help="Force offline synthetic demo")

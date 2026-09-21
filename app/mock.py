@@ -81,7 +81,7 @@ class MockLLM(LLMProvider):
                 "independent_source_urls": [s["url"] for s in independent],
                 "confirmed_facts": [] if rumor else [evidence(primary)] + [evidence(s) for s in independent],
                 "company_claims": [], "unverified_claims": [evidence(primary)] if rumor else [],
-                "key_numbers": [evidence(primary)] if event["category"] == "pricing" else [],
+                "key_numbers": [{**evidence(primary), "status": "FACT"}] if event["category"] == "pricing" else [],
                 "conflicts": [], "confidence": 3 if rumor else 9,
                 "reason": "Нет официального подтверждения" if rumor else "Подтверждено синтетическими источниками"}
         if agent == "context_analyst":
@@ -104,5 +104,5 @@ class MockLLM(LLMProvider):
             ids = [e["id"] for e in data["events"]]
             return {"selected_ids": ids, "summary": "Демонстрационный дайджест: синтетические изменения стоимости и инструментов проверки.",
                 "market_trend": "На этих искусственных примерах показано, как отделять проверяемые изменения от продуктовых гипотез. Вывод о реальном рынке делать нельзя.",
-                "trend_event_ids": ids, "excluded": {}}
+                "trend_event_ids": ids, "excluded": []}
         raise ValueError(f"Unsupported mock role: {agent}")

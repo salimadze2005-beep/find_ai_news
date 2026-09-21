@@ -56,3 +56,7 @@ Editor selects IDs only and cannot alter evidence or scores. Deterministic Russi
 
 ## Checkpoint 8 — UI
 Streamlit dashboard has run control, mock/live choice, threshold/time settings, event cards, evidence, scores, unconfirmed, downloads, history, debug traces and per-call usage. Files: app.py, app/ui.py, .streamlit/config.toml, tests/test_ui.py. All 25 tests pass, including clicking RUN ANALYSIS with AppTest. Fixed AppTest path handling for installed Streamlit. Next: adversarial integration tests, documentation, security/secret audit and push.
+
+## Hardening checkpoint
+Added adversarial regression coverage for unknown/future/conflicting dates, each citation quotation, fabricated numbers, private redirects, DNS pinning, cache invalidation, missing keys, partial failures, invented editor IDs, token budgets and offline mock. Numeric evidence has FACT/COMPANY CLAIM status; downstream prose cannot introduce numeric tokens absent from cited evidence. Changed evidence/schema/prompts and page fetcher. Editorial exclusions changed from open dict to typed list so strict JSON Schema mode is supported. Added AGENTS.md recovery instructions and GitHub Actions. pip check passes; no live API credentials configured. Next: README, final CLI/server smoke, audit and push.
+Hardening validation: all 41 tests pass; no failing tests.

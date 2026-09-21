@@ -8,13 +8,24 @@ def normalized_quote(text):
     return re.sub(r"\s+", " ", text).strip().casefold()
 
 
+def numeric_tokens(text):
+    return set(re.findall(r"\d+(?:[.,]\d+)*", text))
+
+
+def numeric_errors(texts, evidence_text):
+    allowed = numeric_tokens(evidence_text)
+    return [text for text in texts if not numeric_tokens(text) <= allowed]
+
+
 def evidence_errors(items, sources):
     by_url = {s.url: s for s in sources if s.fetched}
     errors = []
     for item in items:
+        if numeric_errors([item.text], item.quote):
+            errors.append("Evidence introduces a number absent from its quote")
         if any(u not in by_url or not valid_url(u) for u in item.source_urls):
             errors.append("Evidence cites an unavailable or invented URL")
-        elif not any(normalized_quote(item.quote) in normalized_quote(by_url[u].content) for u in item.source_urls):
+        elif not all(normalized_quote(item.quote) in normalized_quote(by_url[u].content) for u in item.source_urls):
             errors.append("Evidence quote absent from fetched page text")
     return errors
 
@@ -29,8 +40,8 @@ def verification_errors(v, sources, start, end, minimum):
     independent = [available[u] for u in set(v.independent_source_urls) if u in available]
     if len(independent) != len(set(v.independent_source_urls)):
         errors.append("Independent source unavailable")
-    publishers = {s.source or domain(s.url) for s in independent}
-    primary_domain = (primary.source or domain(primary.url)) if primary else ""
+    publishers = {domain('https://' + s.source) if s.source else domain(s.url) for s in independent}
+    primary_domain = (domain('https://' + primary.source) if primary.source else domain(primary.url)) if primary else ""
     if primary_domain in publishers:
         errors.append("Primary and independent publishers are not distinct")
     publishers.discard(primary_domain)
