@@ -1,0 +1,35 @@
+# Project status
+
+## Requirements and recovery
+See SPEC.md for the complete original brief. Before continuing: inspect files, this file,
+TODO.md, README.md, git status/log/diff, then run `.venv/Scripts/python -m pytest`.
+Never replace working architecture without recording why.
+
+## Architecture decisions
+- Python, Pydantic v2, synchronous bounded pipeline with five independent AI roles.
+- Replaceable SearchProvider and LLMProvider; Tavily and configurable AgentRouter-compatible HTTP adapter.
+- SQLite stores runs, intermediate evidence, URLs and reusable analyses; no sensitive DB in git.
+- Strict UTC time window; unknown dates cannot enter confirmed digest. Historical research is separate.
+- FACT / COMPANY CLAIM / INFERENCE separation; source-backed numbers; deterministic scoring and rendering.
+- Mock mode must exercise the same orchestration without network or API charges.
+- Model IDs and prices are configuration, never assumed current.
+
+## Implemented
+Foundation: configuration with validated weights/bounds, typed domain models, SQLite storage, CLI bootstrap.
+Created app/config.py, app/models.py, app/storage.py, app/run.py, tests/test_foundation.py,
+requirements.txt, pyproject.toml and .gitignore. Remote origin points to the requested repository;
+existing Apache license/history preserved.
+
+## Verification
+Foundation: 4 tests passed; CLI bootstrap successfully initializes SQLite. Dependencies installed in .venv. No failing tests.
+
+## Current stage / next action
+Stage 1 completed and checked. Stage 2 in progress: providers exist in working tree; next add HTTP contract tests and mock fixtures.
+
+## Known limitations
+Agents and UI are not implemented yet; bootstrap CLI only initializes storage.
+Live API end-to-end testing requires user-supplied credentials and available models.
+
+## Remaining
+See TODO.md. Each major checkpoint must include tests, status updates, diff review and a commit.
+
