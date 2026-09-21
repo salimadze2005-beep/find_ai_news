@@ -113,6 +113,7 @@ def in_window(source, start, end):
 class WebPages(PageProvider):
     def __init__(self, max_fetches=80, client=None):
         self.client = client or httpx.Client(timeout=20, follow_redirects=False, trust_env=False,
+            limits=httpx.Limits(max_keepalive_connections=0),
             headers={"User-Agent": "AIIntelligenceResearch/0.1"})
         self.max_fetches = max_fetches
         self.calls = 0

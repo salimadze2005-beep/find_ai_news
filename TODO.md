@@ -14,5 +14,5 @@
 - [x] Pipeline persistence, reuse, logs and usage totals
 - [x] Streamlit UI, debug views and history
 - [x] Integration and adversarial regression tests
-- [ ] README and final CLI/UI smoke tests
+- [x] README and final CLI/UI smoke tests
 - [ ] Secrets audit, clean git status and GitHub push

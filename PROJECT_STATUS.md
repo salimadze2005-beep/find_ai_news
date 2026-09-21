@@ -1,5 +1,34 @@
 # Project status
 
+## Current snapshot — implementation complete, delivery in progress
+All nine implementation stages are complete. The repository contains five research roles,
+seven editable prompts plus shared rules, typed evidence, bounded Tavily/AgentRouter-compatible
+adapters, strict date/source gates, semantic deduplication, configurable scoring, SQLite history,
+analysis reuse, CLI, Streamlit dashboard, usage/cost reporting and offline synthetic mode.
+Final stage changed README.md and added recovery instructions/CI in the preceding checkpoint.
+
+Verified: 41 tests pass (unit, HTTP contracts, adversarial integration, full mock pipeline,
+cache reuse and Streamlit RUN ANALYSIS via AppTest); no failing tests. `pip check` and
+compileall pass. README CLI writes Markdown/JSON; actual Streamlit root and health endpoint
+return HTTP 200. Secret-pattern audit passes; .env is ignored and untracked, as are .venv
+and data. Original repository license/history preserved, incremental commits on main.
+
+Next concrete step: final diff review/commit and push main to existing origin; confirm remote SHA.
+Remaining required work: GitHub delivery only. Live API evaluation is a follow-up requiring keys,
+not claimed as tested. Current environment has no configured live API keys.
+
+Known limitations to preserve in reporting: HTML only, conservative publication metadata/date-only
+handling, snippets/page text caps, LLM-dependent semantic entailment and editorial independence,
+no hidden retries, LLM cost excludes search and special cached-token tariffs, six-hour analysis
+reuse may delay contextual refresh. Aborted process leaves a running row with preserved traces.
+Numeric token checks are conservative and reject unsourced derived percentages/unit rewrites.
+
+Decisions not to change casually: re-verify facts on each run; cache only expensive analysis;
+keep mock explicit and never silently fall back from live; never fill a digest to meet a quota;
+keep credentials and local databases outside Git; preserve FACT/CLAIM/INFERENCE separation.
+
+## Checkpoint history (earlier states below are historical)
+
 ## Requirements and recovery
 See SPEC.md for the complete original brief. Before continuing: inspect files, this file,
 TODO.md, README.md, git status/log/diff, then run `.venv/Scripts/python -m pytest`.
@@ -23,7 +52,7 @@ existing Apache license/history preserved.
 ## Verification
 Foundation: 4 tests passed; CLI bootstrap successfully initializes SQLite. Dependencies installed in .venv. No failing tests.
 
-## Current stage / next action
+## Foundation stage / next action at that checkpoint
 Stage 1 completed and checked. Stage 2 in progress: providers exist in working tree; next add HTTP contract tests and mock fixtures.
 
 ## Known limitations
@@ -60,3 +89,6 @@ Streamlit dashboard has run control, mock/live choice, threshold/time settings, 
 ## Hardening checkpoint
 Added adversarial regression coverage for unknown/future/conflicting dates, each citation quotation, fabricated numbers, private redirects, DNS pinning, cache invalidation, missing keys, partial failures, invented editor IDs, token budgets and offline mock. Numeric evidence has FACT/COMPANY CLAIM status; downstream prose cannot introduce numeric tokens absent from cited evidence. Changed evidence/schema/prompts and page fetcher. Editorial exclusions changed from open dict to typed list so strict JSON Schema mode is supported. Added AGENTS.md recovery instructions and GitHub Actions. pip check passes; no live API credentials configured. Next: README, final CLI/server smoke, audit and push.
 Hardening validation: all 41 tests pass; no failing tests.
+
+Final page transport detail: validated public IP is pinned with original TLS SNI/Host; keepalive disabled to prevent certificate reuse across hostnames sharing an IP. Targeted provider/regression suite: 23 tests pass after this change.
+Real public HTTPS page fetch via pinned transport succeeded (python.org); no paid API involved.
