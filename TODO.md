@@ -9,7 +9,7 @@
 - [x] Normalization, semantic deduplication, date filtering
 - [x] Verifier and source/fact/claim validation
 - [x] Context Analyst and hype detection
-- [ ] Impact Analyst and weighted scoring
+- [x] Impact Analyst and weighted scoring
 - [ ] Editor, digest and unconfirmed section
 - [ ] Pipeline persistence, reuse, logs and usage totals
 - [ ] Streamlit UI, debug views and history

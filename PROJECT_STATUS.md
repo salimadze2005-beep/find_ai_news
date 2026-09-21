@@ -46,3 +46,7 @@ Implemented separate Verifier prompt/module, supplementary research, fetched quo
 ## Checkpoint 5 — context
 Context Analyst performs separate historical research, validates baseline quotations and reports relative change, hype and limitations. Files: app/agents/context_analyst.py, prompts/context_analyst.md, tests/test_context.py. Next: configurable scoring and practical impact. Live comparative quality remains unmeasured without credentials.
 Checkpoint 5 validation: all 20 tests passed; no failing tests.
+
+## Checkpoint 6 — impact
+Impact Analyst now produces practical opportunities, product hypotheses, concrete experiments and optional Alfa relevance. Deterministic weighted score and confidence capped by verification. Added app/agents/impact_analyst.py, app/pipeline/scoring.py, impact prompt and tests/test_scoring.py. Fixed a Pydantic deprecated model_fields access. Next: Editor, full orchestration and CLI.
+Checkpoint 6: 22 tests passed without warnings; no known failing tests.
