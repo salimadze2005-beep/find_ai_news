@@ -1,5 +1,34 @@
 # Project status
 
+## Latest checkpoint — free OpenRouter routing, 2026-09-22
+
+User requested free models for every role. Public OpenRouter `/api/v1/models` lists
+`openrouter/free` at zero input/output prices; `z-ai/glm-5.3-flash:free` is absent.
+Updated ignored local `.env`: LLM_MODEL and all five role overrides are `openrouter/free`,
+OpenRouter base URL, MOCK_MODE=false, LLM_RESPONSE_FORMAT=json_schema, zero model prices.
+Queries and deduplication inherit Scout's free model. Keys were preserved and never printed.
+Tracked changes: README.md, PROJECT_STATUS.md, TODO.md only; application code unchanged.
+
+Recovery: clean starting tree at b9020c0; read status/checklist/README, git history/diffs;
+51 tests passed before configuration and all 51 passed afterwards (11.61 seconds).
+`.env` remains ignored and untracked; git diff --check passes.
+
+Live results (not a successful nonempty digest):
+- json_object attempt failed schema validation at query generation.
+- json_schema curated public-source run 8ae8e862-4047-4df7-8956-40c69a61a87f:
+  5 calls, 32,926 tokens, $0 configured LLM cost; 0 events, one ValidationError warning.
+  Reports/traces: ignored data/free-router-schema-check.json and .sqlite3.
+- Tavily access recovered: one probe returned two results, then three real discovery searches worked.
+- Ordinary bounded live run: 3 LLM calls, 21,280 tokens, $0 configured LLM cost; Scout
+  extracted one candidate, Verifier returned incomplete/refused output. No event reached
+  Context/Impact or an actual Editor LLM call. Data: data/free-router-discovery.json/.sqlite3.
+
+Remaining limitation: free routing is callable but output reliability is insufficient for
+confirmed end-to-end acceptance. Do not call empty warning-bearing runs a successful digest.
+Next step: inspect bounded output/reasoning allocation or evaluate another available free
+model, then rerun all roles. Keep free-only selection unless the user requests paid models.
+Search usage is separate from free LLM pricing. Previous checkpoint reports below are historical.
+
 ## Current snapshot — implementation complete; real-source hardening added
 All nine implementation stages are complete. The repository contains five research roles,
 seven editable prompts plus shared rules, typed evidence, bounded Tavily/AgentRouter-compatible

@@ -48,6 +48,13 @@ python -m pytest -q
 
 ## Реальные API
 
+Для бесплатных LLM-вызовов через OpenRouter используйте `LLM_BASE_URL=https://openrouter.ai/api/v1`,
+`LLM_MODEL=openrouter/free`, а также `openrouter/free` в `SCOUT_MODEL`, `VERIFIER_MODEL`,
+`CONTEXT_MODEL`, `IMPACT_MODEL`, `EDITOR_MODEL`. Рекомендуется `LLM_RESPONSE_FORMAT=json_schema`.
+Router выбирает доступную бесплатную модель для каждого запроса; качество и валидность
+ответов могут различаться. Бесплатность LLM не распространяется на Tavily.
+На 22 сентября 2026 `z-ai/glm-5.3-flash:free` отсутствует в публичном каталоге OpenRouter.
+
 В `.env` установите `MOCK_MODE=false`, заполните `TAVILY_API_KEY`, `LLM_API_KEY`,
 `LLM_MODEL` и при необходимости `LLM_BASE_URL`. Ключи нужны только для live mode.
 Адаптер использует HTTPS и добавляет `/chat/completions` к base URL.
