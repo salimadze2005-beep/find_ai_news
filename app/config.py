@@ -27,6 +27,8 @@ class Settings(BaseSettings):
     tavily_api_key: SecretStr = SecretStr("")
     llm_response_format: str = "json_object"
     llm_max_output_tokens: int = Field(6000, ge=512, le=16000)
+    llm_response_attempts: int = Field(2, ge=1, le=3)
+    llm_response_deadline_seconds: int = Field(120, ge=10, le=300)
     max_llm_calls: int = Field(80, ge=1, le=200)
     max_search_calls: int = Field(80, ge=1, le=200)
     max_page_fetches: int = Field(80, ge=1, le=200)

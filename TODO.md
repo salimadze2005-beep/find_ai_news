@@ -21,6 +21,8 @@
 - [x] Configure live APIs and evaluate discovery, real pages and strict verification on current news
 - [x] Configure all roles on openrouter/free and verify real API/search calls
 - [x] Retest on 2026-09-23: 51 tests pass; live search empty; curated Verifier schema failure reproduced
-- [ ] Achieve a complete live run through Editor: free router currently returns invalid/incomplete Verifier output; Tavily access recovered
+- [x] Bounded schema/truncation repair, diagnostics, deadline and pipeline regression test
+- [x] Real free-API Verifier recovery and downstream historical replay through Editor (Editor rerun required)
+- [ ] Confirm reliable fresh-news discovery and digest quality; free models can still emit unsupported claims
 - [ ] Build a labelled corpus to compare source independence, recall and factual accuracy
 - [ ] Expand date extraction and non-HTML support using that evaluation

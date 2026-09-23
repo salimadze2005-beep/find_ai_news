@@ -1,5 +1,49 @@
 # Project status
 
+## Latest implementation checkpoint — bounded response repair, 2026-09-23
+
+Fixed root cause: Verifier's evidence retry only ran after Pydantic parsing succeeded;
+schema/JSON errors escaped before that loop. AgentRouterProvider now retries malformed
+JSON/schema responses within LLM_RESPONSE_ATTEMPTS (default 2, max 3), supplying the original
+input, bounded previous output and sanitized field/type diagnostics. All attempts count
+toward MAX_LLM_CALLS and are persisted separately. Whole fenced JSON is unwrapped locally;
+missing facts are never synthesized. HTTP failures/refusals are not retried.
+
+Truncation now reports finish_reason=length and can retry with at most double output tokens,
+capped at 16000; OpenRouter receives reasoning.enabled=false on that retry. Usage adds actual
+routed model, finish reason, reasoning tokens, attempt and safe validation codes. Raw outputs
+and API error bodies are not logged. Keepalive responses have an elapsed-time check after
+each chunk (LLM_RESPONSE_DEADLINE_SECONDS=120), socket timeout and 2 MB response cap.
+
+Files changed: app/llm/provider.py, app/config.py, app/models.py, .env.example,
+app/evaluate_pipeline.py, tests/test_response_repair.py, README.md and both status files.
+Evaluation supports explicit timezone-aware --as-of for historical runs and preserves role
+overrides from .env unless --analysis-model is supplied. No secrets/config keys changed.
+
+Live validation with openrouter/free:
+- Real-source historical run recovered an invalid JSON query response from a routed content
+  safety model on its second attempt. A subsequent evidence retry stalled on keepalives;
+  that diagnostic process was stopped and its database run marked failed (not left running).
+- Targeted replay of previously fetched real Qwen sources at 2026-09-21T11:00:27Z reproduced
+  Verifier length truncation: nex-n2.5-mini returned 6000 completion tokens and finish=length.
+  Automatic retry via nex-n2.5-pro returned valid JSON, and unchanged evidence gates passed.
+- Context and Impact then passed real API/schema/evidence checks. The first Editor response
+  was rejected for an unsupported number; an explicit Editor-only replay using the same
+  analyzed event passed and selected one event. This was a cached-source historical evaluation,
+  not a claim of successful fresh Tavily discovery. Trace data stays in ignored data/:
+  free-repair-validation.sqlite3, repair-replay-results.json, editor-replay-response.json.
+  Targeted replay plus Editor rerun used 52,608 LLM tokens at configured zero cost; the earlier
+  stopped diagnostic has partial usage and unknown usage for the interrupted request.
+
+Validation: response-repair regression tests cover field errors, fences, truncation, refusal,
+HTTP failure, budgets, sanitized logs, keepalive deadline, aggregate retry input and complete
+pipeline recovery through Editor. Mock CLI writes Markdown/JSON. All 61 tests pass (10.54s),
+including Streamlit AppTest; compileall and pip check pass. No failing tests. Diff check passes;
+.env is ignored/untracked. This checkpoint is ready for commit and delivery.
+Preserve all source/date/numeric gates and free-only routing. Remaining limitation: free-router
+semantic quality and latency vary; valid JSON can still contain unsupported claims. Next step:
+evaluate fresh news coverage and evidence quality separately from transport/schema reliability.
+
 ## Retest checkpoint — 2026-09-23
 
 Recovered from clean ed2a91e; inspected structure, status/checklist/README, history and both

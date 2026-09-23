@@ -120,6 +120,11 @@ class Editorial(Model):
 class Usage(Model):
     agent: str
     model: str
+    actual_model: str | None = None
+    finish_reason: str | None = None
+    reasoning_tokens: int | None = Field(default=None, ge=0)
+    validation_errors: list[str] = Field(default_factory=list)
+    attempt: int = Field(default=1, ge=1)
     input_tokens: int | None = Field(default=None, ge=0)
     output_tokens: int | None = Field(default=None, ge=0)
     total_tokens: int | None = Field(default=None, ge=0)
