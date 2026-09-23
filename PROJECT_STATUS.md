@@ -1,5 +1,27 @@
 # Project status
 
+## Retest checkpoint — 2026-09-23
+
+Recovered from clean ed2a91e; inspected structure, status/checklist/README, history and both
+diffs. All 51 tests pass (14.12 seconds). No application/configuration changes this checkpoint.
+All roles still use openrouter/free, live mode and json_schema.
+
+Bounded current-news run (data/free-retest-2026-09-23.json/.sqlite3): queries succeeded,
+actual routed model nvidia/nemotron-3-ultra-550b-a55b:free, finish_reason=stop. All three
+Tavily searches returned no results. No candidates or downstream LLM calls; zero warnings.
+One LLM call, 845 tokens, provider-reported cost zero. This is not end-to-end acceptance.
+
+Curated real-source run e484515e-a8ce-4657-ba92-40f5ab5e7a16
+(data/free-retest-curated-2026-09-23.json/.sqlite3): Scout produced two candidates.
+Qwen Verifier failed schema validation; xAI was rejected for insufficient independent
+evidence/date support. Zero confirmed events, one warning, five calls, 30,541 tokens,
+configured LLM cost zero. Old corpus uses current run time; it is not a historical replay.
+Total retest usage: 31,386 tokens. Tavily cost is separate.
+
+Still unfinished: reliable real run through Context/Impact/Editor. Next concrete step remains
+safe diagnosis of Verifier schema errors and bounded response repair; do not relax evidence
+gates or silently use paid models. Updated only this status file and TODO.md.
+
 ## Latest checkpoint — free OpenRouter routing, 2026-09-22
 
 User requested free models for every role. Public OpenRouter `/api/v1/models` lists
