@@ -37,3 +37,7 @@
 - [ ] Confirm reliable fresh-news discovery and digest quality; free models can still emit unsupported claims
 - [ ] Build a labelled corpus to compare source independence, recall and factual accuracy
 - [ ] Expand date extraction and non-HTML support using that evaluation
+
+## Reader follow-up — 2026-09-25
+- [x] Open every news section independently; verify in tests and browser
+- [ ] Complete and inspect a real 72-hour news report

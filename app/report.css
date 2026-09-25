@@ -16,7 +16,8 @@ summary { cursor: pointer; color: #305c48; font-size: 15px; font-weight: 600; pa
 summary:hover { color: #172e22; }
 summary:focus-visible, a:focus-visible { outline: 3px solid #699b80; outline-offset: 4px; border-radius: 3px; }
 details[open] > summary { border-bottom: 1px solid #e4e9e4; margin-bottom: 18px; }
-details details { border-left: 2px solid #e4e9e4; padding-left: 18px; font-size: 15px; }
+.news-card > details { border-top: 1px solid #e4e9e4; margin: 0; padding: 4px 0; }
+.news-card > details > summary { font-size: 17px; }
 ul { padding-left: 22px; margin: 10px 0 22px; }
 li { padding-left: 4px; margin: 10px 0; }
 a { color: #305c48; text-decoration-color: #a4b9aa; text-underline-offset: 3px; overflow-wrap: anywhere; }

@@ -1,5 +1,22 @@
 # Project status
 
+## Independent report sections — 2026-09-25
+
+Removed the outer disclosure hiding the five news sections. Every section is now a
+sibling details/summary directly in its news card; opening Sources or Practical use
+requires no earlier section to be open. Multiple sections can remain open. Evidence
+subsections use plain headings, preserving the facts/claims distinction and original JSON.
+Changed app/report.py, app/report.css and tests/test_report.py. Regenerated the user's
+existing data/current-news-readable.html and .md without API calls. Browser verified
+Sources opens while earlier sections remain collapsed, then Practical use opens alongside it.
+Full suite: 80 passed; no failing tests. Report regression checks five independent sections,
+no nested disclosure or exclusive accordion group, escaping and unchanged evidence.
+Current unfinished step: requested live 72-hour run, output data/news-72h.*.
+The first attempt failed because local 9Router was stopped (ConnectError); restarted the
+installed gateway bound to 127.0.0.1 with updates/browser launch disabled. Retry is running.
+Next step: inspect completed live results, document counts/limitations, commit and push.
+Keep strict source/date gates and the default 48-hour setting; 72 hours is a run override.
+
 ## Russian reader report — 2026-09-25
 
 Implemented the user's confirmed presentation choices: report only, concise news cards with

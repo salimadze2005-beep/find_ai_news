@@ -17,10 +17,15 @@ def test_reports_are_russian_structured_and_leave_evidence_unchanged(tmp_path):
     assert soup.html["lang"] == "ru"
     for card in soup.select("article.news-card")[:len(digest.events)]:
         assert card.find("p", class_="ratings").find_parent("details") is None
-        details = card.find("details")
-        assert "open" not in details.attrs
-        assert [h.get_text() for h in details.find_all("h3", recursive=False)] == [
+        sections = card.find_all("details", recursive=False)
+        assert len(sections) == 5
+        assert [section.summary.get_text() for section in sections] == [
             "Что произошло", "Почему важно", "Как применить", "Ограничения", "Источники"]
+        for section in sections:
+            assert "open" not in section.attrs
+            assert "name" not in section.attrs  # Opening one must not close another.
+            assert section.find_parent("details") is None
+            assert not section.find("details")
     for obsolete in ["INFERENCE", "ИНФЕРЕНЦИЯ", "FACT", "COMPANY CLAIM", "Significance:", "Confidence:", "статус — в"]:
         assert obsolete not in soup.get_text()
         assert obsolete not in md

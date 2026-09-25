@@ -135,10 +135,8 @@ def render_report(digest, html=False):
         w.heading(f"{index}. {event.event.candidate.title}", 2)
         w.ratings(event.significance_score, i.scores.confidence)
         w.paragraph(v.confirmed_facts[0].text if v.confirmed_facts else i.what_happened, labelled=True)
-        w.details("Подробнее о новости")
-        w.heading("Что произошло")
+        w.details("Что произошло")
         w.paragraph(i.what_happened, labelled=True)
-        w.details("Подтверждения, заявления и цифры")
         for title, items in [("Подтверждено источниками", v.confirmed_facts),
                              ("По заявлению компании", v.company_claims),
                              ("Подтверждённые цифры", [x for x in v.key_numbers if x.status == "FACT"]),
@@ -147,9 +145,9 @@ def render_report(digest, html=False):
                 w.heading(title, 4)
                 w.evidence(items)
         w.end_details()
-        w.heading("Почему важно")
+        w.details("Почему важно")
         w.paragraph(i.why_it_matters, labelled=True)
-        w.details("Что изменилось и как мы это оцениваем")
+        w.heading("Что изменилось", 4)
         w.paragraph(c.what_changed)
         if c.previous_state:
             w.heading("Что было раньше", 4)
@@ -158,23 +156,21 @@ def render_report(digest, html=False):
         names = {"importance": "Важность", "novelty": "Новизна", "practicality": "Применимость", "impact": "Влияние", "confidence": "Достоверность"}
         w.bullets([f"{names[k]}: {number(value)}/10" for k, value in i.scores.model_dump().items()])
         w.end_details()
-        w.heading("Как применить")
+        w.details("Как применить")
         w.bullets(i.practical_opportunities, labelled=True)
         if i.what_to_try:
             w.heading("С чего начать", 4)
             w.paragraph(i.what_to_try, labelled=True)
-        w.details("Для продуктовой команды")
+        w.heading("Для продуктовой команды", 4)
         w.paragraph(i.product_impact, labelled=True)
         if i.alfa_bank_relevance:
             w.heading("Возможная польза для Альфа-Банка", 4)
             w.paragraph(i.alfa_bank_relevance, labelled=True)
         w.end_details()
-        w.heading("Ограничения")
-        w.bullets(i.inference_limitations or c.limitations, labelled=True)
-        w.details("Подробности проверки")
-        w.bullets(c.limitations + v.conflicts)
+        w.details("Ограничения")
+        w.bullets(i.inference_limitations + c.limitations + v.conflicts, labelled=True)
         w.end_details()
-        w.heading("Источники")
+        w.details("Источники")
         w.source("Первоисточник", v.primary_source_url)
         for url in dict.fromkeys(v.independent_source_urls):
             w.source("Независимая публикация", url)
