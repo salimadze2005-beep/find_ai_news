@@ -1,5 +1,35 @@
 # Project status
 
+## Russian reader report — 2026-09-25
+
+Implemented the user's confirmed presentation choices: report only, concise news cards with
+expandable details, plain Russian, immediately visible significance and reliability scores,
+and calm minimal styling. Every confirmed news item has the five requested sections:
+what happened, why it matters, practical use, limitations and sources. Company claims and
+supported facts remain distinguishable using Russian wording. Removed reader-facing
+INFERENCE/FACT/COMPANY CLAIM headings and replaced inference labels with natural language.
+Detailed evidence, historical comparisons and usage stay available in expandable blocks.
+Unknown cost is explicitly unknown rather than a misleading zero price.
+
+Added app/report.py and app/report.css: shared content structure produces Markdown and a
+self-contained HTML file using native details/summary (no JavaScript, CDN or API required).
+Added CLI --html and --from-json so saved runs can be reformatted without any paid calls.
+app/ui.py only adds the HTML download action; dashboard news cards/layout are unchanged.
+Updated app/render.py, app/run.py, prompts/common.md, prompts/impact_analyst.md and README.
+Original JSON, quotes, evidence, scores, source URLs and verification gates are unchanged.
+The report cleans legacy status labels when displaying historical runs; prompts request
+short, natural Russian for future analyses. Established technical/product names remain.
+
+Verified: regenerated the actual accepted live report into ignored
+data/current-news-readable.html and .md, opened it in a browser, inspected both collapsed
+and expanded cards and working source links. This formatting work made no paid LLM calls.
+All 80 tests pass, including HTML/script/link escaping, visible ratings, five-section layout,
+unchanged evidence, unknown-cost wording and offline saved-JSON export; no failing tests.
+Markdown details depend on the viewer, so standalone HTML is the recommended reading format.
+Old stored wording is preserved apart from display-label cleanup; future prose follows the
+new style prompts. Presentation stage complete. Next optional step: user review of the HTML
+report; broader research-quality follow-ups remain below. Preserve source/evidence separation.
+
 ## Current-news acceptance passed — 2026-09-25
 
 Ordinary live discovery using 9Router cx/gpt-5.6-sol and Tavily completed for the real UTC

@@ -12,8 +12,8 @@ def test_end_to_end_and_reuse(tmp_path):
     assert len(first.events) == 2
     assert len(first.unconfirmed) == 1
     assert not first.warnings
-    assert "UNCONFIRMED" in render_digest(first)
-    assert "DEMO / MOCK" in render_digest(first)
+    assert "Требует проверки" in render_digest(first)
+    assert "События вымышлены" in render_digest(first)
     second = run_pipeline(settings, now=now)
     assert len(second.events) == 2
     assert len(second.usage) < len(first.usage)

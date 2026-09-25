@@ -16,6 +16,9 @@
 - [x] Integration and adversarial regression tests
 - [x] README and final CLI/UI smoke tests
 - [x] Secrets audit, clean git status and GitHub push
+- [x] Russian reader report with expandable news cards and visible significance/reliability
+- [x] Standalone HTML download and offline reformatting of saved JSON reports
+- [x] Reader-report browser review and escaping/evidence-preservation tests
 
 ## Optional quality follow-ups (not unimplemented MVP components)
 - [x] Diagnose and fix overloaded queries, news retrieval, fair result allocation and primary lookup

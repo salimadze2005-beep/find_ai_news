@@ -5,7 +5,7 @@ from app.models import FinalDigest
 from app.storage import Database
 from app.pipeline.orchestrator import run_pipeline
 from app.llm.base import ProviderError
-from app.render import render_digest, usage_totals, safe, evidence_lines
+from app.render import render_digest, render_html, usage_totals, safe, evidence_lines
 
 
 def show_digest(digest):
@@ -69,6 +69,7 @@ def show_digest(digest):
     for warning in digest.warnings:
         st.warning(warning)
     st.download_button("Скачать Markdown", render_digest(digest), file_name="ai-intelligence.md", mime="text/markdown")
+    st.download_button("Скачать отчёт с подробностями", render_html(digest), file_name="ai-intelligence.html", mime="text/html")
     st.download_button("Скачать JSON", digest.model_dump_json(indent=2), file_name="ai-intelligence.json", mime="application/json")
 
 
