@@ -18,6 +18,8 @@
 - [x] Secrets audit, clean git status and GitHub push
 
 ## Optional quality follow-ups (not unimplemented MVP components)
+- [x] Verify local 9Router availability and model catalog; support loopback HTTP safely
+- [ ] Configure 9Router API key locally and run authenticated agent plus bounded live pipeline
 - [x] Configure live APIs and evaluate discovery, real pages and strict verification on current news
 - [x] Configure all roles on openrouter/free and verify real API/search calls
 - [x] Retest on 2026-09-23: 51 tests pass; live search empty; curated Verifier schema failure reproduced

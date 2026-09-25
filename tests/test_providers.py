@@ -29,6 +29,21 @@ def test_llm_contract_usage_and_model():
     assert llm.usage[0].estimated_cost == pytest.approx(.00014)
 
 
+@pytest.mark.parametrize("base_url", ["http://127.0.0.1:20128/v1", "http://localhost:20128/v1", "http://[::1]:20128/v1"])
+def test_local_gateway_http_is_allowed(base_url):
+    llm = AgentRouterProvider(Settings(_env_file=None, llm_base_url=base_url),
+        httpx.Client(transport=httpx.MockTransport(lambda request: httpx.Response(200, json={
+            "choices": [{"message": {"content": '{"answer":"ok"}'}, "finish_reason": "stop"}]}))))
+    assert llm.generate_structured("scout", "JSON", {}, Answer).answer == "ok"
+
+
+@pytest.mark.parametrize("base_url", ["http://example.com/v1", "http://192.168.1.1/v1",
+    "http://user:pass@127.0.0.1:20128/v1", "http://127.0.0.1:20128/v1?token=x"])
+def test_insecure_or_credentialed_gateway_is_rejected(base_url):
+    with pytest.raises(ProviderError, match="LLM_BASE_URL"):
+        AgentRouterProvider(Settings(_env_file=None, llm_base_url=base_url))
+
+
 @pytest.mark.parametrize("response", [httpx.Response(429, text="secret"), httpx.Response(200, json={"choices": []})])
 def test_llm_sanitized_failure(response):
     llm = AgentRouterProvider(Settings(_env_file=None), httpx.Client(transport=httpx.MockTransport(lambda r: response)))

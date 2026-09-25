@@ -51,8 +51,10 @@ class AgentRouterProvider(LLMProvider):
         super().__init__()
         self.settings = settings
         parts = urlsplit(settings.llm_base_url)
-        if parts.scheme != "https" or not parts.hostname or parts.username or parts.query or parts.fragment:
-            raise ProviderError("LLM_BASE_URL must be an HTTPS base URL without credentials/query")
+        loopback_http = parts.scheme == "http" and parts.hostname in {"localhost", "127.0.0.1", "::1"}
+        if (not (parts.scheme == "https" or loopback_http) or not parts.hostname
+                or parts.username or parts.password or parts.query or parts.fragment):
+            raise ProviderError("LLM_BASE_URL must use HTTPS or local loopback HTTP, without credentials/query")
         self.client = client or httpx.Client(timeout=90, trust_env=False)
         self.calls = 0
 

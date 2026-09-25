@@ -48,6 +48,14 @@ python -m pytest -q
 
 ## Реальные API
 
+Для локального 9Router задайте в `.env` `LLM_BASE_URL=http://127.0.0.1:20128/v1`,
+`LLM_MODEL=cx/gpt-5.6-sol` и тот же model ID для пяти ролевых переменных.
+Создайте API-ключ в интерфейсе 9Router и сохраните его как `LLM_API_KEY` только в `.env`.
+Подключённый к Codex аккаунт сам по себе не даёт этому Python-процессу API-ключ.
+Актуальные model IDs можно посмотреть в локальном `/v1/models`; ID `gpt-6-sol`
+может отсутствовать. Обычный HTTP разрешён адаптером только для `localhost`, `127.0.0.1`
+и `::1`; для удалённого шлюза требуется HTTPS. Без ключа 9Router отвечает HTTP 401.
+
 Для бесплатных LLM-вызовов через OpenRouter используйте `LLM_BASE_URL=https://openrouter.ai/api/v1`,
 `LLM_MODEL=openrouter/free`, а также `openrouter/free` в `SCOUT_MODEL`, `VERIFIER_MODEL`,
 `CONTEXT_MODEL`, `IMPACT_MODEL`, `EDITOR_MODEL`. Рекомендуется `LLM_RESPONSE_FORMAT=json_schema`.
@@ -57,7 +65,7 @@ Router выбирает доступную бесплатную модель д�
 
 В `.env` установите `MOCK_MODE=false`, заполните `TAVILY_API_KEY`, `LLM_API_KEY`,
 `LLM_MODEL` и при необходимости `LLM_BASE_URL`. Ключи нужны только для live mode.
-Адаптер использует HTTPS и добавляет `/chat/completions` к base URL.
+Адаптер добавляет `/chat/completions` к base URL.
 Значение по умолчанию — `https://agentrouter.org/v1`; подтвердите адрес и model IDs
 в кабинете своего gateway. Сервисы с названием AgentRouter могут иметь разные endpoints.
 Поддерживается совместимый JSON chat-completions контракт, не нестандартные agentic APIs.

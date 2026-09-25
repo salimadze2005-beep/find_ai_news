@@ -1,5 +1,32 @@
 # Project status
 
+## Local 9Router integration checkpoint — 2026-09-25
+
+User selected local 9Router with `cx/gpt-5.6-sol` for the AI roles. The running gateway at
+`http://127.0.0.1:20128` returned HTTP 200 for `/api/health` and `/v1/models`; its current
+catalog contains `cx/gpt-5.6-sol` but no `gpt-6-sol`. An unauthenticated bounded
+`/v1/chat/completions` probe returned HTTP 401, so model inference has not been confirmed.
+The ignored local `.env` still points to OpenRouter and holds an OpenRouter-format key; it was
+not sent to 9Router or changed. Codex account integration is not an application API key.
+
+Architecture decision: retain the existing OpenAI-compatible `AgentRouterProvider`; permit
+HTTP only for `localhost`, `127.0.0.1`, and `::1` so it can reach a local 9Router instance.
+Remote gateways still require HTTPS and credentials/query in the base URL remain forbidden.
+No agent architecture or evidence rules were changed. Substantially changed
+`app/llm/provider.py`, `tests/test_providers.py`, `README.md`, `.env.example`, and both status
+files. Tests now cover allowed loopback endpoints and rejected remote HTTP/credentialed URLs.
+
+Verification: local gateway health/catalog and explicit missing-key 401 confirmed. All 68
+tests pass, including the seven new provider URL tests; no failing tests. Known limitation:
+9Router API key is not configured, so authenticated agent, bounded pipeline, token usage,
+model quality and costs remain untested. The current unfinished stage is local credential
+configuration. Next concrete step: create a 9Router API key in its dashboard, save it only in
+ignored `.env` as `LLM_API_KEY`, set `LLM_BASE_URL=http://127.0.0.1:20128/v1`, set
+`LLM_MODEL` and five role overrides to `cx/gpt-5.6-sol`, then run one short structured
+Scout probe before a capped live pipeline. Do not reuse the existing OpenRouter key.
+Remaining quality work: fresh-news discovery and independent evidence evaluation in TODO.md.
+Preserve strict source/date/numeric gates, bounded calls and secret-free git history.
+
 ## Latest implementation checkpoint — bounded response repair, 2026-09-23
 
 Fixed root cause: Verifier's evidence retry only ran after Pydantic parsing succeeded;
