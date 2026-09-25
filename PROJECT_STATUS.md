@@ -1,5 +1,42 @@
 # Project status
 
+## Current-news acceptance passed — 2026-09-25
+
+Ordinary live discovery using 9Router cx/gpt-5.6-sol and Tavily completed for the real UTC
+window 2026-09-23T07:57:40Z through 2026-09-25T07:57:40Z: 59 raw hits, 30 unique retained,
+8 candidates, 6 evaluated under the diagnostic cap, 1 confirmed event and 2 unconfirmed,
+zero final warnings. All five roles ran on real data. Amazon's Selling Partner plugin for
+Quick/Claude passed primary plus independent evidence, Context, Impact and Editor; score 6.7.
+Amazon's dated primary announcement is 2026-09-23T13:00:08.829Z, with fresh GeekWire reporting.
+Old Nvidia/GPN-Star events, uncertain Google coverage and unestablished event dates were
+rejected rather than silently included. One malformed Verifier response recovered via the
+existing bounded structured-output retry.
+
+This acceptance run used 15 LLM calls and 162,187 reported tokens. All calls have usage;
+prices are unconfigured, so cost is unknown. Reports/traces remain in ignored
+data/current-news-acceptance.{md,json,sqlite3}. Appended this genuine live run and its traces
+to the normal application database so it is visible in run history; previous runs preserved.
+Added non-secret evaluation/current_news_acceptance_2026-09-25.json with counts, times,
+source URLs and usage. Default application settings remain 48 hours, 8 queries, 30 results,
+12 analysis candidates and the user's cx/gpt-5.6-sol model. Diagnostic caps did not alter .env.
+
+Final refinements: Scout search_subject includes the distinguishing platform/update, not
+just the old product name; verifier treats it as search keywords instead of an exact quoted
+phrase. Full English calendar dates with explicit years now normalize consistently with
+Russian/ISO evidence, avoiding false numeric/date rejection; absent years remain unknown.
+Analytical repair feedback identifies the exact unsupported numeric/date tokens without
+logging source prose. Changes: scout/verifier/context/impact/editor, prompts/scout.md,
+prompts/verifier.md, tests/test_providers.py, this file, TODO.md and acceptance artifact.
+
+Validation: all 76 tests pass; meaningful tests cover retrieval fallback/budget, fair allocation,
+unfiltered primary lookup, unrelated timestamps, multilingual full dates and bounded
+Context/Impact/Editor repair. Mock README CLI succeeds; pip check succeeds; actual Streamlit
+health responds HTTP 200. No known failing tests. .env remains ignored/untracked.
+Current implementation stage is complete. Next concrete optional step: measure recall and
+editorial independence against a labelled multi-day corpus; do not infer exhaustive market
+coverage from one successful run. External publisher blocking and LLM quality remain
+limitations. Preserve strict evidence/date gates and the selected gateway/model.
+
 ## Search and evidence recovery fixes — 2026-09-25 (live acceptance in progress)
 
 Recovered clean b0ecb84; all original 68 tests passed. Diagnosed actual stored queries:

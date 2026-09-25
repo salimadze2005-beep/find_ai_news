@@ -1,7 +1,7 @@
 from app.models import Editorial
 from app.agents.common import ask_validated
 from app.llm.base import ProviderError
-from app.agents.verifier import numeric_errors
+from app.agents.verifier import unsupported_numbers
 
 
 def edit(events, llm, settings, trace):
@@ -25,8 +25,9 @@ def edit(events, llm, settings, trace):
             raise ProviderError("Market trend cites events not selected for digest")
         selected = [e for e in eligible if e.event.candidate.id in decision.selected_ids]
         baseline = " ".join(x.text for e in selected for x in e.event.verification.confirmed_facts + e.event.verification.company_claims + e.event.verification.key_numbers + e.context.previous_state)
-        if numeric_errors([decision.summary, decision.market_trend], baseline):
-            raise ProviderError("Editor introduces a number absent from selected evidence")
+        missing = unsupported_numbers([decision.summary, decision.market_trend], baseline)
+        if missing:
+            raise ProviderError("Editor introduces a number absent from selected evidence: " + missing)
     decision = ask_validated(llm, "editor", {"events": compact}, Editorial, validate, trace)
     if decision.selected_ids and not decision.trend_event_ids and decision.market_trend:
         decision.market_trend = "Недостаточно данных для подтверждённого общего тренда."

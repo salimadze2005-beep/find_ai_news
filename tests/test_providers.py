@@ -117,6 +117,16 @@ def test_primary_lookup_does_not_filter_undated_pages():
     search.search('"Product Name" official release', None, datetime(2026, 9, 25, tzinfo=timezone.utc), 5)
 
 
+def test_full_textual_dates_preserve_numeric_evidence():
+    from datetime import date
+    from app.agents.verifier import numeric_errors, quoted_event_date
+    assert not numeric_errors(["Выпущено 24 сентября 2026 года"], "Released September 24, 2026")
+    assert quoted_event_date("Released September 24, 2026") == date(2026, 9, 24)
+    assert quoted_event_date("Released Sept. 24, 2026") == date(2026, 9, 24)
+    assert quoted_event_date("Released September 24") is None
+    assert numeric_errors(["Выпущено 25 сентября 2026 года"], "Released September 24, 2026")
+
+
 def test_common_publication_metadata_and_time_element():
     assert article_data('<meta name="parsely-pub-date" content="2026-09-20T10:00:00Z">')[1] is not None
     assert article_data('<time datetime="2026-09-20T10:00:00Z">20 September</time>')[1] is not None

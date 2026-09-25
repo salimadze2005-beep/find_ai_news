@@ -1,0 +1,44 @@
+{
+  "checked_at_window_end": "2026-09-25T07:57:40.451297+00:00",
+  "window_start": "2026-09-23T07:57:40.451297+00:00",
+  "mode": "live, automatically discovered current sources",
+  "model": "cx/gpt-5.6-sol",
+  "run_id": "d335cfef-967e-4bd1-9c51-74f84f8f3c5b",
+  "discovery": {
+    "queries": 8,
+    "raw_results": 59,
+    "unique_results": 30
+  },
+  "candidates": 8,
+  "candidates_evaluated": 6,
+  "confirmed": 1,
+  "unconfirmed": 2,
+  "warnings": [],
+  "usage": {
+    "input_tokens": 138717,
+    "output_tokens": 23470,
+    "total_tokens": 162187,
+    "known_cost": 0,
+    "calls": 15,
+    "unknown_usage_calls": 0,
+    "unknown_cost_calls": 15,
+    "duration": 463.16
+  },
+  "events": [
+    {
+      "title": "Amazon открыла инструменты продавцов для Anthropic Claude через плагин",
+      "occurred_at": "2026-09-23T13:00:08.829000+00:00",
+      "significance": 6.7,
+      "primary": "https://www.aboutamazon.com/news/innovation-at-amazon/seller-assistant-plugin-amazon-quick-claude",
+      "independent": [
+        "https://www.geekwire.com/2026/amazon-opens-its-seller-tools-to-outside-ai-agents-starting-with-anthropics-claude",
+        "https://www.emarketer.com/content/amazon-gives-its-ai-powered-seller-assistant-major-upgrade"
+      ]
+    }
+  ],
+  "limitations": [
+    "This bounded test evaluated six candidates; normal configuration allows twelve.",
+    "Recall across the whole market is not measured.",
+    "Unknown API price; zero known_cost does not mean free."
+  ]
+}

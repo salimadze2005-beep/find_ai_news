@@ -21,11 +21,11 @@
 - [x] Diagnose and fix overloaded queries, news retrieval, fair result allocation and primary lookup
 - [x] Fix publication dates polluted by related article timestamps
 - [x] Add bounded evidence repair for Context, Impact and Editor
-- [ ] Accept the combined fixes on an ordinary current-news run and inspect all confirmed events
+- [x] Accept search/evidence fixes on an ordinary current-news run and inspect its confirmed event
 - [x] Verify local 9Router availability and model catalog; support loopback HTTP safely
 - [x] Configure 9Router API key locally and run authenticated agent plus bounded live pipeline
 - [x] Confirm all five roles can call the selected 9Router model
-- [ ] Obtain a fully confirmed real-news event through Context, Impact and Editor on 9Router
+- [x] Obtain a fully confirmed real-news event through Context, Impact and Editor on 9Router
 - [x] Configure live APIs and evaluate discovery, real pages and strict verification on current news
 - [x] Configure all roles on openrouter/free and verify real API/search calls
 - [x] Retest on 2026-09-23: 51 tests pass; live search empty; curated Verifier schema failure reproduced

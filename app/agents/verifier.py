@@ -46,6 +46,18 @@ def numeric_tokens(text):
         day, month_name, year = match.groups()
         dates.add(f"date:{int(year):04d}-{months[month_name]:02d}-{int(day):02d}")
         cleaned = re.sub(re.escape(match.group(0)), " ", cleaned, count=1, flags=re.IGNORECASE)
+    english_months = {name: month for month, names in enumerate([
+        ("January", "Jan"), ("February", "Feb"), ("March", "Mar"), ("April", "Apr"),
+        ("May",), ("June", "Jun"), ("July", "Jul"), ("August", "Aug"),
+        ("September", "Sept", "Sep"), ("October", "Oct"), ("November", "Nov"),
+        ("December", "Dec")], 1) for name in names}
+    month_pattern = "|".join(english_months)
+    pattern = rf"\b({month_pattern})\.?\s+([0-3]?\d)(?:,\s*|\s+)(20\d{{2}})\b"
+    for match in list(re.finditer(pattern, cleaned, re.IGNORECASE)):
+        name, day, year = match.groups()
+        month = next(value for key, value in english_months.items() if key.casefold() == name.casefold())
+        dates.add(f"date:{int(year):04d}-{month:02d}-{int(day):02d}")
+        cleaned = cleaned.replace(match.group(0), " ")
     values = set(re.findall(r"(?<![\w-])\d+(?:[.,]\d+)*(?:[KMB])?(?![\w-])", cleaned, re.IGNORECASE))
     return dates | {value.casefold().replace(",", ".") for value in values}
 
@@ -55,10 +67,23 @@ def numeric_errors(texts, evidence_text):
     return [text for text in texts if not numeric_tokens(text) <= allowed]
 
 
+def unsupported_numbers(texts, evidence_text):
+    """Safe feedback contains only numeric/date tokens, never source or response prose."""
+    return ", ".join(sorted(set().union(*(numeric_tokens(t) for t in texts)) - numeric_tokens(evidence_text))[:12])
+
+
 def quoted_event_date(quote):
     match = re.search(r"(?<!\d)(20\d{2})[-./](0[1-9]|1[0-2])[-./](0[1-9]|[12]\d|3[01])(?!\d)", quote)
     if not match:
-        return None
+        # Full textual dates carry the same calendar evidence as ISO dates; no time is inferred.
+        dates = [token[5:] for token in numeric_tokens(quote) if token.startswith("date:")]
+        if len(dates) != 1:
+            return None
+        try:
+            from datetime import date
+            return date.fromisoformat(dates[0])
+        except ValueError:
+            return None
     try:
         from datetime import date
         return date(*(int(value) for value in match.groups()))
@@ -196,8 +221,8 @@ def ensure_core_evidence(v, sources, entities):
 def verify(candidate, llm, search, pages, settings, start, end, trace):
     subject = candidate.search_subject or candidate.entities[0]
     queries = [
-        f'"{subject}" official {candidate.event_kind}',
-        f'"{subject}" {candidate.event_kind} news',
+        f'{subject} official {candidate.event_kind}',
+        f'{subject} {candidate.event_kind} news',
     ]
     found = []
     for query in queries:

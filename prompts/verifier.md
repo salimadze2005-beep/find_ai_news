@@ -10,7 +10,9 @@ confirmed_facts must collectively cite the primary source and at least one indep
 Use separate Evidence entries when those pages express the same core fact in different languages
 or wording; each entry needs its own verbatim quote from exactly one page.
 Use date_source_url and date_quote for the event date. date_quote must be a short exact quote
-from the fetched page containing the date in YYYY-MM-DD, YYYY.MM.DD, or YYYY/MM/DD form.
+from the fetched page containing the full calendar date: ISO, YYYY.MM.DD, YYYY/MM/DD,
+or a spelled-out date with an explicit year such as "September 24, 2026".
+Never invent an ISO quote by rewriting the original. A month/day without a year is insufficient.
 Prefer publication metadata; an official changelog/repository line such as
 "2026.09.20: We released Product X" is valid event-date evidence even if the page itself has
 no publication metadata. occurred_at is when the event happened, not when a recap was published.

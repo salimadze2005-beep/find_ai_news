@@ -20,7 +20,7 @@ class Discovery(Model):
     potential_significance: str
     potential_significance_score: float = Field(default=5, ge=0, le=10)
     entities: list[str] = Field(min_length=1)
-    search_subject: str = Field(default="", description="Exact specific product, model or paper name from the sources, not just its vendor")
+    search_subject: str = Field(default="", description="Short original-language search phrase: vendor/product plus the distinguishing update, platform or action; 3-8 words from the sources")
 
 
 class Discoveries(Model):
