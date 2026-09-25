@@ -1,5 +1,41 @@
 # Project status
 
+## Authenticated 9Router test — 2026-09-25
+
+The user provided a local 9Router API key in ignored `.env`. Validated without printing or
+committing it: a direct `cx/gpt-5.6-sol` chat request returned HTTP 200 and `OK` (provider
+reported 2,495 tokens); a strict `json_schema` call through `AgentRouterProvider` returned
+valid Pydantic output with 77 tokens. Updated only ignored `.env` to use
+`http://127.0.0.1:20128/v1`, `cx/gpt-5.6-sol` for `LLM_MODEL` and all five role overrides,
+`MOCK_MODE=false` and `LLM_RESPONSE_FORMAT=json_schema`. Existing Tavily key was preserved.
+The gateway reports actual model `gpt-5.6-sol` and usage for every completed call. Individual
+structured probes succeeded for Impact Analyst and Editor (77 tokens each).
+
+Bounded fresh-news run (8 LLM calls / 6 searches / 12 pages maximum): Tavily was reachable
+when the process had network access; three searches returned one broad Reddit timeline and
+no qualifying candidates. Queries and Scout succeeded through 9Router (1,534 tokens total),
+zero events, zero warnings. Files are ignored under `data/9router-live.*`. An earlier run in
+the restricted network sandbox failed on Tavily connection; a direct Tavily probe with
+network access returned HTTP 200. These are environment-access differences, not an
+application auth failure.
+
+Bounded historical real-source replay of the 2026-09-21 Qwen corpus: Queries, Scout,
+Verifier and Context Analyst made four successful 9Router calls, 22,453 tokens total.
+Verifier accepted the candidate; Context added a number absent from its cited evidence,
+so the deterministic evidence guard rejected it. Final digest has zero confirmed events
+and one warning. The guarded rejection is correct; Context answer quality is a remaining
+limitation. Impact and Editor were separately confirmed callable, but the complete real-news
+chain did not reach them on a verified event. Search/page/LLM usage is persisted in ignored
+SQLite/JSON artifacts. Price is unknown because `MODEL_PRICES` is not configured; do not
+interpret zero known cost as a free run.
+
+Files materially changed in this checkpoint: ignored `.env` (local only), PROJECT_STATUS.md,
+TODO.md. Prior checkpoint committed the adapter, URL tests and README. All 68 tests pass;
+no failing tests. Next concrete step: improve fresh-news retrieval and Context evidence
+grounding using the labelled corpus, then rerun a capped full pipeline. Preserve the
+source/date/numeric gates, local-only HTTP exception and bounded call budget. Remaining
+quality tasks are tracked in TODO.md.
+
 ## Local 9Router integration checkpoint — 2026-09-25
 
 User selected local 9Router with `cx/gpt-5.6-sol` for the AI roles. The running gateway at

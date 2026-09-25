@@ -19,7 +19,9 @@
 
 ## Optional quality follow-ups (not unimplemented MVP components)
 - [x] Verify local 9Router availability and model catalog; support loopback HTTP safely
-- [ ] Configure 9Router API key locally and run authenticated agent plus bounded live pipeline
+- [x] Configure 9Router API key locally and run authenticated agent plus bounded live pipeline
+- [x] Confirm all five roles can call the selected 9Router model
+- [ ] Obtain a fully confirmed real-news event through Context, Impact and Editor on 9Router
 - [x] Configure live APIs and evaluate discovery, real pages and strict verification on current news
 - [x] Configure all roles on openrouter/free and verify real API/search calls
 - [x] Retest on 2026-09-23: 51 tests pass; live search empty; curated Verifier schema failure reproduced
