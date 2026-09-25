@@ -16,6 +16,23 @@ def test_scout_synthetic_events():
     assert all(e.title.startswith("DEMO") for e in events)
 
 
+def test_results_budget_is_shared_between_queries():
+    from app.models import NewsSource
+    from app.search.base import SearchProvider
+    class Search(SearchProvider):
+        def search(self, query, start_date, end_date, limit):
+            return [NewsSource(title=query, url=f"https://example.com/{query}/{i}") for i in range(3)]
+    class LLM:
+        def generate_structured(self, agent, prompt, data, schema):
+            if agent == "queries":
+                return schema(queries=["one", "two", "three"])
+            assert [s["title"] for s in data["results"]] == ["one", "two", "three"]
+            return schema(events=[])
+    now = datetime(2026, 9, 21, tzinfo=timezone.utc)
+    assert scout(LLM(), Search(), Settings(_env_file=None, search_queries_count=3, max_scout_results=3),
+                 now-timedelta(hours=48), now, lambda *args: None) == []
+
+
 def test_duplicate_articles_merged():
     e = candidates()[0]
     assert len(deduplicate([e, e.model_copy(update={"id": "duplicate"})])) == 1

@@ -18,6 +18,10 @@
 - [x] Secrets audit, clean git status and GitHub push
 
 ## Optional quality follow-ups (not unimplemented MVP components)
+- [x] Diagnose and fix overloaded queries, news retrieval, fair result allocation and primary lookup
+- [x] Fix publication dates polluted by related article timestamps
+- [x] Add bounded evidence repair for Context, Impact and Editor
+- [ ] Accept the combined fixes on an ordinary current-news run and inspect all confirmed events
 - [x] Verify local 9Router availability and model catalog; support loopback HTTP safely
 - [x] Configure 9Router API key locally and run authenticated agent plus bounded live pipeline
 - [x] Confirm all five roles can call the selected 9Router model

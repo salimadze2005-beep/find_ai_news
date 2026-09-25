@@ -1,5 +1,38 @@
 # Project status
 
+## Search and evidence recovery fixes — 2026-09-25 (live acceptance in progress)
+
+Recovered clean b0ecb84; all original 68 tests passed. Diagnosed actual stored queries:
+Russian date-prefixed multi-topic keyword lists returned one broad Reddit result. Short
+English news-topic queries produced relevant current stories. Changed query prompt to one
+topic/vendor, English, no inline dates. Scout now uses SearchProvider.discover (default
+delegates to search); Tavily uses news first and a bounded seven-day general fallback only
+when sparse. Final confirmation still uses the exact requested window. Round-robin result
+selection prevents early queries exhausting the global result cap. Discovery summary is
+persisted; empty discovery gets an explicit insufficient-evidence warning.
+
+First current-data trial: 54 search hits, 30 unique retained, 7 candidates; top 3 evaluated,
+0 confirmed and 2 unconfirmed. This exposed further concrete retrieval bugs: verifier used
+the broad vendor entity, and date filters hid undated primary documentation. Added optional
+search_subject to discovery/candidate models, used for targeted verification/context. Primary
+lookups no longer apply search-index date filters; fetched evidence is still date-checked.
+Real A/B lookup recovered GPN-Star Nature/GitHub and UiPath's primary Cartographer announcement.
+
+Page parser included related-card time tags in publication metadata, making TechCrunch dates
+unknown. Prefer publication metadata, use article-scoped time tags only as fallback; conflicting
+publication metadata still fails closed. Real TechCrunch page now resolves to
+2026-09-24T19:00:42Z. Context, Impact and Editor now have one bounded domain-validation repair
+with concrete feedback, preserving numeric/evidence gates and provider call budgets.
+
+Changed app/search/{base,provider,pages}.py, scout/verifier/context/impact/editor/common agents,
+models.py, orchestrator.py, query/scout prompts, provider/scout tests and new analysis-repair
+tests. All 75 tests pass; no failing tests. Next concrete step: repeat ordinary current-data
+pipeline with the combined fixes and examine every accepted event and trace. Full live
+acceptance remains unfinished; do not claim a nonempty verified digest yet. Artifacts under
+ignored data/ include search-diagnosis.json, current-news-fix.*, techcrunch-diagnosis.html.
+Keep the existing five-role architecture, chosen cx/gpt-5.6-sol model, secrets in ignored .env,
+strict dates, independent evidence, numerical gates and paid-call bounds.
+
 ## Authenticated 9Router test — 2026-09-25
 
 The user provided a local 9Router API key in ignored `.env`. Validated without printing or

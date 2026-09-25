@@ -62,6 +62,31 @@ def test_tavily_discards_search_date():
     assert search.search("release", datetime(2026, 9, 19, tzinfo=timezone.utc), datetime(2026, 9, 21, tzinfo=timezone.utc), 2)[0].published_at is None
 
 
+def test_news_discovery_falls_back_without_trusting_search_dates():
+    requests = []
+    def handle(req):
+        data = json.loads(req.content)
+        requests.append(data)
+        items = [] if data["topic"] == "news" else [{"title": "Release", "url": "https://example.com/a",
+            "published_date": "2026-09-20"}]
+        return httpx.Response(200, json={"results": items})
+    search = TavilyProvider(Settings(_env_file=None), httpx.Client(transport=httpx.MockTransport(handle)))
+    found = search.discover("model release", datetime(2026, 9, 19, tzinfo=timezone.utc),
+                            datetime(2026, 9, 21, tzinfo=timezone.utc), 5)
+    assert [r["topic"] for r in requests] == ["news", "general"]
+    assert requests[0]["start_date"] == "2026-09-19"
+    assert requests[1]["start_date"] == "2026-09-14"
+    assert found[0].published_at is None
+
+
+def test_discovery_fallback_respects_search_budget():
+    search = TavilyProvider(Settings(_env_file=None, max_search_calls=1),
+        httpx.Client(transport=httpx.MockTransport(lambda request: httpx.Response(200, json={"results": []}))))
+    assert search.discover("model release", datetime(2026, 9, 19, tzinfo=timezone.utc),
+                           datetime(2026, 9, 21, tzinfo=timezone.utc), 5) == []
+    assert search.calls == 1
+
+
 def test_page_dates_and_window():
     content, date, precision, evidence = article_data('<meta property="article:published_time" content="2026-09-20T10:00:00Z"><article>New release</article>')
     source = NewsSource(title="a", url="https://example.com/a", content=content, published_at=date, date_precision=precision, date_evidence=evidence)
@@ -73,6 +98,23 @@ def test_page_dates_and_window():
 
 def test_conflicting_dates_unknown():
     assert article_data('<meta name="date" content="2026-09-20"><script type="application/ld+json">{"datePublished":"2020-01-01"}</script>')[1] is None
+
+
+def test_related_article_times_do_not_override_publication_metadata():
+    html = '<meta property="article:published_time" content="2026-09-24T19:00:42Z">'
+    html += '<article><time datetime="2026-09-24T12:00:42-07:00">Published</time>Release</article>'
+    html += '<aside><time datetime="2026-09-23T15:17:39-07:00">Related story</time></aside>'
+    assert article_data(html)[1] == datetime(2026, 9, 24, 19, 0, 42, tzinfo=timezone.utc)
+
+
+def test_primary_lookup_does_not_filter_undated_pages():
+    def handle(req):
+        data = json.loads(req.content)
+        assert data["topic"] == "general"
+        assert "start_date" not in data and "end_date" not in data
+        return httpx.Response(200, json={"results": []})
+    search = TavilyProvider(Settings(_env_file=None), httpx.Client(transport=httpx.MockTransport(handle)))
+    search.search('"Product Name" official release', None, datetime(2026, 9, 25, tzinfo=timezone.utc), 5)
 
 
 def test_common_publication_metadata_and_time_element():

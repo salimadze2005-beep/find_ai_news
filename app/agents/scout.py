@@ -1,4 +1,5 @@
 import hashlib
+from itertools import zip_longest
 from typing import Literal
 from pydantic import Field
 from app.models import Model, CandidateEvent
@@ -19,6 +20,7 @@ class Discovery(Model):
     potential_significance: str
     potential_significance_score: float = Field(default=5, ge=0, le=10)
     entities: list[str] = Field(min_length=1)
+    search_subject: str = Field(default="", description="Exact specific product, model or paper name from the sources, not just its vendor")
 
 
 class Discoveries(Model):
@@ -28,14 +30,21 @@ class Discoveries(Model):
 def scout(llm, search, settings, start, end, trace):
     queries = ask(llm, "queries", {"start": start.isoformat(), "end": end.isoformat(),
         "count": settings.search_queries_count}, Queries).queries
-    results = {}
+    results, batches = {}, []
     for query in list(dict.fromkeys(queries))[:settings.search_queries_count]:
-        found = search.search(query, start, end, min(10, settings.max_scout_results))
+        found = search.discover(query, start, end, min(10, settings.max_scout_results))
         trace("search", {"query": query, "results": source_data(found, False)})
-        for source in found:
+        batches.append(found)
+    # Give every query a slot before taking its next result; avoid first-query domination.
+    for row in zip_longest(*batches):
+        for source in row:
+            if source is None:
+                continue
             key = canonical_url(source.url)
-            if key in results or len(results) < settings.max_scout_results:
+            if key not in results and len(results) < settings.max_scout_results:
                 results[key] = source.model_copy(update={"url": key})
+    trace("discovery_summary", {"queries": len(batches), "raw_results": sum(map(len, batches)),
+                               "unique_results": len(results)})
     if not results:
         return []
     extracted = ask(llm, "scout", {"start": start.isoformat(), "end": end.isoformat(),

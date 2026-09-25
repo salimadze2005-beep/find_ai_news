@@ -45,6 +45,7 @@ class CandidateEvent(Model):
     potential_significance: str
     potential_significance_score: float = Field(default=5, ge=0, le=10)
     entities: list[str] = Field(min_length=1)
+    search_subject: str = ""
 
 
 class Verification(Model):

@@ -194,14 +194,16 @@ def ensure_core_evidence(v, sources, entities):
 
 
 def verify(candidate, llm, search, pages, settings, start, end, trace):
-    subject = candidate.entities[0] if candidate.entities else candidate.title
+    subject = candidate.search_subject or candidate.entities[0]
     queries = [
-        f'"{subject}" official release announcement GitHub Hugging Face',
-        f'"{subject}" {candidate.event_kind} independent technical analysis',
+        f'"{subject}" official {candidate.event_kind}',
+        f'"{subject}" {candidate.event_kind} news',
     ]
     found = []
     for query in queries:
-        batch = search.search(query, start, end, settings.verify_sources_target * 2)
+        # Primary docs/repositories are often undated; discovery dates must not hide evidence.
+        # All fetched event and independent-publication dates are still checked below.
+        batch = search.search(query, None, end, settings.verify_sources_target * 2)
         trace("verification_search", {"query": query, "results": source_data(batch, False)})
         found.extend(batch)
     sources = {}

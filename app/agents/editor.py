@@ -1,5 +1,5 @@
 from app.models import Editorial
-from app.agents.common import ask
+from app.agents.common import ask_validated
 from app.llm.base import ProviderError
 from app.agents.verifier import numeric_errors
 
@@ -17,18 +17,20 @@ def edit(events, llm, settings, trace):
         "claims": [f.model_dump() for f in e.event.verification.company_claims],
         "context": e.context.model_dump(), "impact": e.impact.model_dump(),
         "significance": e.significance_score} for e in eligible]
-    decision = ask(llm, "editor", {"events": compact}, Editorial)
     allowed = {e.event.candidate.id for e in eligible}
-    if len(set(decision.selected_ids)) != len(decision.selected_ids) or not set(decision.selected_ids) <= allowed:
-        raise ProviderError("Editor returned duplicate or unknown event IDs")
-    if not set(decision.trend_event_ids) <= set(decision.selected_ids):
-        raise ProviderError("Market trend cites events not selected for digest")
+    def validate(decision):
+        if len(set(decision.selected_ids)) != len(decision.selected_ids) or not set(decision.selected_ids) <= allowed:
+            raise ProviderError("Editor returned duplicate or unknown event IDs")
+        if not set(decision.trend_event_ids) <= set(decision.selected_ids):
+            raise ProviderError("Market trend cites events not selected for digest")
+        selected = [e for e in eligible if e.event.candidate.id in decision.selected_ids]
+        baseline = " ".join(x.text for e in selected for x in e.event.verification.confirmed_facts + e.event.verification.company_claims + e.event.verification.key_numbers + e.context.previous_state)
+        if numeric_errors([decision.summary, decision.market_trend], baseline):
+            raise ProviderError("Editor introduces a number absent from selected evidence")
+    decision = ask_validated(llm, "editor", {"events": compact}, Editorial, validate, trace)
     if decision.selected_ids and not decision.trend_event_ids and decision.market_trend:
         decision.market_trend = "Недостаточно данных для подтверждённого общего тренда."
     selected = [next(e for e in eligible if e.event.candidate.id == i) for i in decision.selected_ids]
-    baseline = " ".join(x.text for e in selected for x in e.event.verification.confirmed_facts + e.event.verification.company_claims + e.event.verification.key_numbers + e.context.previous_state)
-    if numeric_errors([decision.summary, decision.market_trend], baseline):
-        raise ProviderError("Editor introduces a number absent from selected evidence")
     exclusions = {x.id: x.reason for x in decision.excluded}
     for e in eligible:
         if e.event.candidate.id not in decision.selected_ids:

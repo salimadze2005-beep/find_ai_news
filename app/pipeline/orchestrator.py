@@ -58,6 +58,8 @@ def run_pipeline(settings=None, now=None, injected=None, progress=lambda message
         llm.on_usage = lambda usage: trace("usage", usage.model_dump(mode="json"))
         progress("Scout: поиск и извлечение кандидатов")
         events = deduplicate(scout(llm, search, settings, start, now, trace), llm, trace)
+        if not events and not settings.mock_mode:
+            warnings.append("Discovery found no candidates. This is insufficient search evidence, not proof that no AI news occurred.")
         events.sort(key=lambda e: e.potential_significance_score, reverse=True)
         for deferred in events[settings.max_analysis_events:]:
             trace("rejected", {"id": deferred.id, "reason": "Deferred: analysis event budget"})

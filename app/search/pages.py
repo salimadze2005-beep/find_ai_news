@@ -87,8 +87,12 @@ def article_data(html):
             walk(json.loads(script.string or ""))
         except (ValueError, RecursionError):
             continue
-    for t in soup.select('time[datetime]'):
-        dates.append(t.get("datetime", t.get_text()))
+    # Card/recommendation timestamps are not metadata for the current article.
+    # Use visible time elements only when publication metadata is unavailable.
+    if not any(parse_date(value)[0] is not None for value in dates):
+        time_scope = soup.find("article") or soup.find("main") or soup
+        for t in time_scope.select('time[datetime]'):
+            dates.append(t.get("datetime", t.get_text()))
     parsed = [(raw, *parse_date(raw)) for raw in dates]
     parsed = [x for x in parsed if x[1] is not None]
     # Conflicting metadata is not trustworthy enough for automatic inclusion.
