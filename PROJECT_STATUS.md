@@ -11,10 +11,33 @@ existing data/current-news-readable.html and .md without API calls. Browser veri
 Sources opens while earlier sections remain collapsed, then Practical use opens alongside it.
 Full suite: 80 passed; no failing tests. Report regression checks five independent sections,
 no nested disclosure or exclusive accordion group, escaping and unchanged evidence.
-Current unfinished step: requested live 72-hour run, output data/news-72h.*.
+Current unfinished step: recover interrupted live 72-hour run, output data/news-72h.*.
 The first attempt failed because local 9Router was stopped (ConnectError); restarted the
-installed gateway bound to 127.0.0.1 with updates/browser launch disabled. Retry is running.
-Next step: inspect completed live results, document counts/limitations, commit and push.
+installed gateway bound to 127.0.0.1 with updates/browser launch disabled. The run was
+interrupted during a machine/session pause after gateway HTTP 503 errors. On 2026-09-26,
+recovery confirmed a clean tree and 80 passing tests. Run ID
+a7e49fee-1a9c-4c1d-ab66-a13a03f4e48e has persisted discovery, six verification results
+and one complete Gemini CLI analysis. Local ignored data/recover_72h.py resumes only
+five unfinished candidates, preserves the original Sep 22–25 window and cumulative usage,
+and writes explicit interruption/remaining-error warnings. Recovery exported a PARTIAL
+report on Sep 26: data/news-72h.{html,md,json}, also copied to current-news-readable.*.
+Exact retained window: 2026-09-22 15:21:24 UTC to 2026-09-25 15:21:24 UTC.
+Discovery: 8 queries, 56 raw results, 30 retained publications, 11 candidates.
+Outcome: 1 fully verified/analyzed Gemini CLI event, 4 attributable unconfirmed events.
+Three candidates (Gemini Live, Casepoint analysis, GMI Cloud) and final Editor remain
+incomplete because the local gateway repeatedly became unavailable (ConnectError after
+previous HTTP 503s). Fallback summary uses neutral fixed text; it is not an LLM editorial.
+Usage across initial run and recovery: 27 attempts, 208015 known tokens; 8 attempts lack
+usage, all prices unknown. No claim of a complete or current Sep 26 market review.
+Evidence-only summary: evaluation/news_72h_recovery_2026-09-26.json.
+Verified final HTML: exact 72-hour duration, no nested details, five independent sections.
+Recovery suite: 80 passed, no failures. CLI mock and Streamlit health 200 verified in this
+stage; .env ignored/untracked and tracked credential-pattern scan clean.
+Current unfinished stage: full live acceptance remains limited by gateway availability.
+Next concrete step: restore stable 9Router access, finish the three candidates/Editor or
+start a newly dated 72-hour discovery if a current (rather than retained) window is wanted.
+Reader layout is complete and was pushed as 0555bb2. Preserve validated evidence and
+usage traces; do not relabel this saved window as today's latest news.
 Keep strict source/date gates and the default 48-hour setting; 72 hours is a run override.
 
 ## Russian reader report — 2026-09-25

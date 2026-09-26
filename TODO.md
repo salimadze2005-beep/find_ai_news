@@ -40,4 +40,5 @@
 
 ## Reader follow-up — 2026-09-25
 - [x] Open every news section independently; verify in tests and browser
-- [ ] Complete and inspect a real 72-hour news report
+- [x] Save and inspect a partial real 72-hour report from persisted results
+- [ ] Complete live 72-hour acceptance: three candidates and Editor blocked by unavailable 9Router

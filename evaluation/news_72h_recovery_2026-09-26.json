@@ -1,0 +1,34 @@
+{
+  "run_id": "a7e49fee-1a9c-4c1d-ab66-a13a03f4e48e",
+  "window_start": "2026-09-22T15:21:24.214810+00:00",
+  "window_end": "2026-09-25T15:21:24.214810+00:00",
+  "confirmed": 1,
+  "unconfirmed": 4,
+  "partial": true,
+  "usage": {
+    "input_tokens": 179500,
+    "output_tokens": 28515,
+    "total_tokens": 208015,
+    "known_cost": 0,
+    "calls": 27,
+    "unknown_usage_calls": 8,
+    "unknown_cost_calls": 27,
+    "duration": 4332.53
+  },
+  "limitations": [
+    "Отчёт восстановлен после прерывания. Период сохранён относительно начала исходного запуска 25 сентября; это не скользящее окно на момент открытия файла.",
+    "Не удалось завершить проверку: Gemini 3.8 Live with Live Avatar стала общедоступна. LLM request/JSON validation failed (ConnectError)",
+    "Не удалось завершить проверку: Casepoint представила двух AI-агентов для проверки документов. LLM request/JSON validation failed (ConnectError)",
+    "Не удалось завершить проверку: GMI Cloud запустила Model-as-a-Service и MCP tooling. LLM request/JSON validation failed (ConnectError)",
+    "Финальный текст редактора недоступен; показаны сохранённые проверенные карточки. LLM request/JSON validation failed (ConnectError)"
+  ],
+  "confirmed_sources": [
+    {
+      "title": "Google усилила защиту Gemini CLI от prompt injection",
+      "primary": "https://geminicli.com/docs/changelogs/latest",
+      "independent": [
+        "https://thenewstack.io/gemini-cli-prompt-injection-safeguards"
+      ]
+    }
+  ]
+}
